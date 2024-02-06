@@ -8,7 +8,7 @@
     "test": "npx jest",
     "dev": "nodemon --exec npx esrun src/index.ts",
     "clean-up" : "rm -rf dist && rm -rf ./src/routes",
-    "generate-tsoa": "yarn run tsoa spec-and-routes",
+    "generate-tsoa": "tsoa spec-and-routes",
     "pre-build" : "node preProcess.js",
     "build" : "npm run clean-up && npm run generate-tsoa && npm run test && npm run pre-build && tsc",
     "serve" : "node dist/src/index.js",
