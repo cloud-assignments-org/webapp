@@ -12,6 +12,7 @@
     "removeComments": true,
     "forceConsistentCasingInFileNames": true,
     "strictPropertyInitialization": false,
+    "resolveJsonModule": true
     
   },
   "exclude": ["node_modules", "./*.ts", "src/__test__"]
