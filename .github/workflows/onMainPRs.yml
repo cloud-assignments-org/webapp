@@ -13,8 +13,6 @@ on:
 jobs:
   build:
     runs-on: self-hosted # self Hosted runner
-    container: 
-      image: centos:8 # Use CentOS 8 container
 
     steps:
     - uses: actions/checkout@v2
