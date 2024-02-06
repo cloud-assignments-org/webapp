@@ -2,11 +2,12 @@ import express from "express";
 import cors from "cors"
 import swaggerUi from "swagger-ui-express";
 import { RegisterRoutes } from "../routes/routes.js";
-import errorHandler from "./errorHandler.middleware.js";
+import {methodNotAllowed, badRequestHandler, cacheControl} from "./errorHandler.middleware.js";
 import { EnvConfiguration, Environment } from "../config/env.config.js";
 
 export const configMiddleware = (app: any) => {
   app.use(express.json(), cors());
+  app.use( cacheControl, methodNotAllowed, badRequestHandler );
 
   RegisterRoutes(app);
 
@@ -18,5 +19,4 @@ export const configMiddleware = (app: any) => {
       swaggerUi.setup(swaggerDocument)
     );
   }
-  app.use(errorHandler);
 };
