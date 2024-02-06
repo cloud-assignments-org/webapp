@@ -10,7 +10,7 @@
     "clean-up" : "rm -rf dist && rm -rf ./src/routes",
     "generate-tsoa": "tsoa spec-and-routes",
     "pre-build" : "node preProcess.js",
-    "build" : "npm run clean-up && npm run generate-tsoa && npm run test && npm run pre-build && tsc",
+    "build" : "npm run clean-up && npm run generate-tsoa && npm run test && npm run pre-build && npx tsc",
     "serve" : "node dist/src/index.js",
     "demo" : "npm run build && npm run serve"
 
