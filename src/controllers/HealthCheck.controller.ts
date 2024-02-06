@@ -15,7 +15,6 @@ export class HealthCheckController extends Controller {
       await AppDataSource.destroy();
       this.setStatus(200);
     } catch (error: any) {
-      console.log(error);
       this.setStatus(503);
     }
     return;

@@ -1,3 +1,4 @@
+#!/bin/sh
 echo "\n===========================\nBase case shows 200 when database is up and 503 when database is 
 down \n"
 echo "\n===========================\ncurl -vvvv -XGET 
