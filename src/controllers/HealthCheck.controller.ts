@@ -1,6 +1,5 @@
 import { Controller, Get, Route } from "tsoa";
-import { AppDataSource } from "../config/database.config.js";
-import { ServiceUnavailableError } from "../errorHandling/Errors.js";
+import { DBConnection } from "../entities/DBConnection.js";
 
 @Route("/")
 export class HealthCheckController extends Controller {
@@ -11,9 +10,12 @@ export class HealthCheckController extends Controller {
   @Get("healthz")
   public async checkConnection(): Promise<void> {
     try {
-      await AppDataSource.initialize();
-      await AppDataSource.destroy();
-      this.setStatus(200);
+      const connection = (await DBConnection.find())[0];
+      if(connection) {
+        this.setStatus(200);
+      } else {
+        this.setStatus(503);
+      }
     } catch (error: any) {
       this.setStatus(503);
     }

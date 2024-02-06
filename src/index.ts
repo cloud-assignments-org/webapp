@@ -3,10 +3,7 @@ import express from "express";
 import { EnvConfiguration } from "./config/env.config.js";
 import { AppDataSource } from "./config/database.config.js";
 import { configMiddleware } from "./middlewares/index.js";
-
-
-//
-
+import { DBConnection } from "./entities/DBConnection.js";
 class Server {
   constructor() {
     this.bootstrap();
@@ -14,24 +11,43 @@ class Server {
 
   // bootstrap
   async bootstrap() {
-    // AppDataSource.initialize()
-    //   .then(() => {
-    //     console.log("Data Source has been initialized!");
-    //     const app = express();
-    //     configMiddleware(app);
-    //     app.listen(EnvConfiguration.PORT, () => {
-    //       console.log("TCP server established on port " , EnvConfiguration.PORT);
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.error("Error during Data Source initialization", err);
-    //   });
+    checkDBConnectionRepeatedly();
     const app = express();
     configMiddleware(app);
     app.listen(EnvConfiguration.PORT, () => {
-      console.log("TCP server established on port " , EnvConfiguration.PORT);
+      console.log("TCP server established on port ", EnvConfiguration.PORT);
     });
   }
 }
+
+const checkDBConnectionRepeatedly = () => {
+  
+  // We try to see if we have established connection to the database, else we try doing it again after a given interval
+  setInterval(() => {
+
+    if (!AppDataSource.isInitialized) {
+
+      AppDataSource.initialize()
+      
+        .then(async () => {
+
+          console.log("Data Source has been initialized!");
+
+          const connection = (await DBConnection.find())[0] || DBConnection.create({
+            i: 0
+          });
+
+          connection.i += 1;
+
+          await connection.save();
+
+        })
+        .catch(async (err) => {
+          // catching errors - but don't want to pollute logs with a line every 1 second
+          // console.error("Error during Data Source initialization retrying in 1 second");
+        });
+    }
+  }, 1000);
+};
 
 new Server();
