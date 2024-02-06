@@ -65,7 +65,7 @@ while true; do
     read db_action
 
     if [ "$db_action" = "start" ]; then
-        start_database
+        start_database && sleep 1 
     elif [ "$db_action" = "stop" ]; then
         stop_database
     else
