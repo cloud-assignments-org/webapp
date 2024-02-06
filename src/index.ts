@@ -14,18 +14,23 @@ class Server {
 
   // bootstrap
   async bootstrap() {
-    AppDataSource.initialize()
-      .then(() => {
-        console.log("Data Source has been initialized!");
-        const app = express();
-        configMiddleware(app);
-        app.listen(EnvConfiguration.PORT, () => {
-          console.log("TCP server established on port " , EnvConfiguration.PORT);
-        });
-      })
-      .catch((err) => {
-        console.error("Error during Data Source initialization", err);
-      });
+    // AppDataSource.initialize()
+    //   .then(() => {
+    //     console.log("Data Source has been initialized!");
+    //     const app = express();
+    //     configMiddleware(app);
+    //     app.listen(EnvConfiguration.PORT, () => {
+    //       console.log("TCP server established on port " , EnvConfiguration.PORT);
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.error("Error during Data Source initialization", err);
+    //   });
+    const app = express();
+    configMiddleware(app);
+    app.listen(EnvConfiguration.PORT, () => {
+      console.log("TCP server established on port " , EnvConfiguration.PORT);
+    });
   }
 }
 
