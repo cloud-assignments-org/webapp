@@ -18,10 +18,6 @@ jobs:
     - uses: actions/checkout@v2
       name: Checkout code
 
-    - name: Display CentOS version
-      run: cat /etc/centos-release
-
-
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
