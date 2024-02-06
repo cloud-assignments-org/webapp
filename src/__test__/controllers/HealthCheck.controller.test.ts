@@ -1,63 +1,63 @@
+import { FindManyOptions } from "typeorm";
 import { HealthCheckController } from "../../controllers/HealthCheck.controller";
-import { AppDataSource } from "../../config/database.config";
+import { DBConnection } from "../../entities/DBConnection";
+import {
+  mockCreate,
+  mockCreateQueryBuilder,
+  mockFind,
+  mockFindAndCount,
+  mockFindBy,
+  mockFindOneBy,
+  mockSave,
+} from "../TypeORMMocks";
 
-jest.mock("../../config/database.config", () => {
-  const mockInitialize = jest.fn();
-  const mockDestroy = jest.fn();
-
+// Assuming HealthCheckController has a method that directly uses DBConnection
+jest.mock("../../entities/DBConnection", () => {
   return {
-    AppDataSource: {
-      initialize: mockInitialize,
-      destroy: mockDestroy,
-      isInitialized: jest
-        .fn()
-        .mockImplementation(
-          () =>
-            mockInitialize.mock.calls.length > 0 &&
-            mockDestroy.mock.calls.length === 0
-        ),
+    DBConnection: {
+      // Mock static methods directly
+      create: (u: DBConnection) => mockCreate(u),
+      save: (u: DBConnection) => mockSave(u),
+      find: (u: FindManyOptions<DBConnection>) => mockFind(u),
+      findBy: (u: DBConnection) => mockFindBy(u),
+      findOneBy: (u: DBConnection) => mockFindOneBy(u),
+      createQueryBuilder: () => mockCreateQueryBuilder(),
+      findAndCount: (o: FindManyOptions<DBConnection>) => mockFindAndCount(o),
     },
   };
 });
 
-describe("Testing the Health Check Controller", () => {
-  let controller: HealthCheckController;
-  let mockDataSource = AppDataSource as unknown as any;
+describe("Testing the health check controller", () => {
+  let healthCheckController: HealthCheckController;
+  const mockDBFind = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks(); // Clear previous mocks
-
-    // Resetting module cache to ensure a fresh import (and thus fresh mock) for each test
-    jest.resetModules();
-    controller = new HealthCheckController();
-
-    // Resetting mocks
-    mockDataSource.initialize.mockReset().mockImplementation(async () => {}); // cause these are void return types
-    mockDataSource.destroy.mockReset().mockImplementation(async () => {});
-    mockDataSource.isInitialized.mockReset().mockImplementation(() => true); // this is a boolean return type
+  beforeAll(() => {
+    healthCheckController = new HealthCheckController();
+    mockDBFind.mockReset();
+    DBConnection.find = mockDBFind;
   });
 
-  it("Should return 200 when the database connection is succesful", async () => {
-    // Simulate successful initialization and destruction
-    await controller.checkConnection();
+  it("Should return a 200 response code when able to connect to the DB", async () => {
+    // Set up
+    const mockDbConnection = DBConnection.create({ i: 0 });
+    mockDBFind.mockResolvedValue([mockDbConnection]);
 
-    // Assuming you have a way to retrieve the status set by setStatus
-    expect(controller.getStatus()).toBe(200);
-    expect(mockDataSource.initialize).toHaveBeenCalled();
-    expect(mockDataSource.destroy).toHaveBeenCalled();
+    // Execute
+    await healthCheckController.checkConnection();
+
+    // Assert
+    expect(healthCheckController.getStatus()).toBe(200);
   });
 
-  it("should return 503 when the database connection fails", async () => {
-    // Simulate initialization failure
-    mockDataSource.initialize.mockReset().mockImplementation(async () => {
-      throw new Error("Failed to connect");
-    });
+  it("Should return a 503 response code when not able to connect to the DB", async () => {
+    // Set up
+    // const mockDbConnection = DBConnection.create({ i: 0 });
+    mockDBFind.mockResolvedValue(null);
 
-    await controller.checkConnection();
+    // Execute
+    await healthCheckController.checkConnection();
 
-    // Assuming you have a way to retrieve the status set by setStatus
-    expect(controller.getStatus()).toBe(503);
-    expect(mockDataSource.initialize).toHaveBeenCalled();
-    // Destroy might not be called if initialization fails, depending on your logic
+    // Assert
+    expect(healthCheckController.getStatus()).toBe(503);
   });
 });
