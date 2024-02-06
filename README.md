@@ -5,7 +5,7 @@ NUID: 002919280
 
 ## Overview
 
-The API is built using Node.js, Express, and TypeScript, with route generation handled by tsoagit 
+The API is built using Node.js, Express, and TypeScript, with route generation handled by tsoagit. We use github workflows to run tests and build the application before it get's pushed to the ORG main branch. 
 
 ## Getting Started
 
