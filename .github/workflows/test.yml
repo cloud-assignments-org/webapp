@@ -47,5 +47,5 @@ jobs:
       # Executes pre-build tasks
 
     - name: Compile TypeScript
-      run: tsc
+      run: npm run compile
       # Runs the TypeScript compiler
