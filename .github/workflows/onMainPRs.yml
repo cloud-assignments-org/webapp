@@ -12,7 +12,7 @@ on:
 # Jobs to be executed
 jobs:
   build:
-    runs-on: ubuntu-latest # Hosted runner
+    runs-on: self-hosted # self Hosted runner
     container: 
       image: centos:8 # Use CentOS 8 container
 
