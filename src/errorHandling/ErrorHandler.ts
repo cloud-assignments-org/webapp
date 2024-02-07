@@ -10,16 +10,15 @@ import {
 // noinspection JSUnusedLocalSymbols
 export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   if (error instanceof NotFoundError) {
-    res.status(HTTPStatusCode.OK);
+    res.status(HTTPStatusCode.OK).end();
   } else if (error instanceof BadInputError) {
-    res.status(HTTPStatusCode.BAD_REQUEST);
+    res.status(HTTPStatusCode.BAD_REQUEST).end();
   } else if (error instanceof BadRequestError) {
-    res.status(HTTPStatusCode.BAD_REQUEST);
+    res.status(HTTPStatusCode.BAD_REQUEST).end();
   } else if (error instanceof AuthError) {
-    res.status(HTTPStatusCode.UNAUTHORIZED);
+    res.status(HTTPStatusCode.UNAUTHORIZED).end();
   } else {
     console.log(error);
-    res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR);
+    res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).end();
   }
-  next();
 };
