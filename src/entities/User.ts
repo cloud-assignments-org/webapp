@@ -4,16 +4,16 @@ import { CloudBaseEntity } from "./CloudBaseEntity.js"
 @Entity()
 export class User extends CloudBaseEntity {
 
-    @Column({type:"string"})
+    @Column("varchar")
     email!: string
 
-    @Column({type : "varying character"})
+    @Column("varchar")
     password!: string
 
-    @Column({type:"string"})
+    @Column("varchar")
     firstName!: string
 
-    @Column({type:"string"})
+    @Column("varchar")
     lastName!: string
 
 }

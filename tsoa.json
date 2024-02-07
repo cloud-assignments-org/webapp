@@ -2,7 +2,9 @@
   "entryFile": "src/index.ts",
   "securityDefinitions": {
     "basicAuth": {
-      "type": "basic"
+      "type": "basic",
+      "name": "Authorization",
+      "in": "header"
     }
   },
   "noImplicitAdditionalProperties": "throw-on-extras",
@@ -26,6 +28,7 @@
   },
 
   "routes": {
-    "routesDir": "src/routes"
+    "routesDir": "src/routes",
+    "authenticationModule": "./src/middlewares/tsoaAuthModule.ts"
   }
 }
