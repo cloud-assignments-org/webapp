@@ -20,14 +20,14 @@ export async function hashPasswordAndEncode(emailId: string, password: string): 
 }
 
 // Example usage
-const emailId = 'user@example.com';
-const password = 'SecureP@ssw0rd!';
+// const emailId = 'user@example.com';
+// const password = 'SecureP@ssw0rd!';
 
-hashPasswordAndEncode(emailId, password)
-  .then(encodedPassword => {
-    console.log('Encoded Password:', encodedPassword);
-    // Proceed to save the emailId and encodedPassword to your database
-  })
-  .catch(error => {
-    console.error(error);
-  });
+// hashPasswordAndEncode(emailId, password)
+//   .then(encodedPassword => {
+//     console.log('Encoded Password:', encodedPassword);
+//     // Proceed to save the emailId and encodedPassword to your database
+//   })
+//   .catch(error => {
+//     console.error(error);
+//   });
