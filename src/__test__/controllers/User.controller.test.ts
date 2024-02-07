@@ -62,12 +62,7 @@ describe("Testing methods in the user controller file", () => {
 
   it("Should return 200 when a completely new user's detail is passed", async () => {
     // Set up - we have a new user
-    const userDetails: CreateUserAccount = {
-      email: "test@gmail.com",
-      firstName: "John",
-      lastName: "Doe",
-      password: "test123",
-    };
+    const userDetails: CreateUserAccount = newUserDetails;
 
     // Execute
     await userController.createUser(userDetails);
@@ -75,4 +70,18 @@ describe("Testing methods in the user controller file", () => {
     // Assert
     expect(userController.getStatus()).toBe(201);
   });
+
+  it("Should return a 400 bad request when the input email id is not in the right format", async () => {
+
+    // set up
+    const userDetails = Object.assign({}, newUserDetails);
+    userDetails.email = "randomEmailFormat";
+
+    // Execute
+    await userController.createUser(userDetails);
+
+    // Assert
+    expect(userController.getStatus()).toBe(400);
+
+  })
 });
