@@ -12,7 +12,8 @@
     "removeComments": true,
     "forceConsistentCasingInFileNames": true,
     "strictPropertyInitialization": false,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata":true,
     
   },
   "exclude": ["node_modules", "./*.ts", "src/__test__"]

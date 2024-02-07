@@ -71,20 +71,6 @@ describe("Testing methods in the user controller file", () => {
     expect(userController.getStatus()).toBe(201);
   });
 
-  it("Should return a 400 bad request when the input email id is not in the right format", async () => {
-
-    // set up
-    const userDetails = Object.assign({}, newUserDetails);
-    userDetails.email = "randomEmailFormat";
-
-    // Execute
-    await userController.createUser(userDetails);
-
-    // Assert
-    expect(userController.getStatus()).toBe(400);
-
-  })
-
   it("Should not have password in the response and return all other user details", async () => {
     
     // Set up

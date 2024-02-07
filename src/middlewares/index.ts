@@ -9,10 +9,11 @@ import {
 } from "./errorHandler.middleware.js";
 import { EnvConfiguration, Environment } from "../config/env.config.js";
 import swaggerJson from "../routes/swagger.json" assert { type: "json" };
+import { errorHandler } from "../errorHandling/ErrorHandler.js";
 
 export const configMiddleware = (app: any) => {
   app.use(express.json(), cors());
-  app.use(cacheControl, methodNotAllowed, badRequestHandler);
+  app.use(cacheControl, methodNotAllowed, badRequestHandler, errorHandler);
 
   RegisterRoutes(app);
 
