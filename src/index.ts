@@ -46,7 +46,7 @@ const checkDBConnectionRepeatedly = () => {
         })
         .catch(async (err) => {
           // catching errors - but don't want to pollute logs with a line every 1 second
-          console.error("Error during Data Source initialization retrying in 1 second", err);
+          // console.error("Error during Data Source initialization retrying in 1 second", err);
         });
     }
   }, 1000);
