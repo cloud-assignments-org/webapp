@@ -85,4 +85,29 @@ SyntaxError: Expected double-quoted property name in JSON at position 144
 
 [](./images//password%20saved%20in%20db.png)
 
-7. 
+7. As a user, I want to update my account information. I should only be allowed to update the following fields.
+First Name
+Last Name
+Password
+
+Passed
+
+8. As a user, I want to get my account information. Response payload should return all fields for the user except for password.
+
+```shell
+curl --location --request GET 'http://localhost:3000/user' \
+--header 'Authorization: Basic YWpheS12aXNoYWxAbm9ydGhlYXN0ZXJuLmVkdTphamF5LXZpc2hhbC1wYXNzLTQ1Ng=='
+```
+
+```json
+{
+    "id": "27dc1af2-7866-4f1e-857a-91aad6115fd1",
+    "dateCreated": "2024-02-07",
+    "lastModified": "2024-02-07",
+    "email": "ajay-vishal@northeastern.edu",
+    "firstName": "Ajay",
+    "lastName": "Bala"
+}
+```
+
+
