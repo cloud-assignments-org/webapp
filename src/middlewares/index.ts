@@ -14,13 +14,23 @@ import { basicAuthMiddleware } from "./basicAuth.middleware.js";
 import { dbCheck } from "./dbCheckMiddleWare.js";
 
 export const configMiddleware = (app: any) => {
-  app.use(express.json(), cors());
+  app.use(express.json());
+  
+  // Custom error handling middleware for JSON parsing errors
+  app.use((err: any, req: any, res: any, next: any) => {
+    if (err instanceof SyntaxError) {
+      return res.status(400).end();
+    }
+    next(err);
+  });
+
+  app.use(cors());
   app.use(cacheControl, methodNotAllowed, badRequestHandler);
   app.use(dbCheck);
   app.use(basicAuthMiddleware);
   RegisterRoutes(app);
 
-  app.use(errorHandler);
+  // app.use(errorHandler);
 
   if (EnvConfiguration.NODE_ENV === Environment.DEVELOPMENT) {
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJson));
