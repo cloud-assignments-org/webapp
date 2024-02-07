@@ -20,7 +20,7 @@ export const basicAuthMiddleware = async (
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return res.status(401);
+      return res.status(401).end();
     }
 
     const base64Credentials = authHeader.split(" ")[1];
@@ -34,7 +34,7 @@ export const basicAuthMiddleware = async (
         email: username,
       });
       if (!user) {
-        return res.status(401);
+        return res.status(401).end();
       }
 
       const passwordMatch = await bcrypt.compare(password, user.password);
@@ -44,10 +44,10 @@ export const basicAuthMiddleware = async (
         }; // Attach user to request object
         next();
       } else {
-        return res.status(401);
+        return res.status(401).end();
       }
     } catch (error) {
-      return res.status(500).json({ message: "Internal Server Error" });
+      return res.status(500).json({ message: "Internal Server Error" }).end();
     }
   } else {
     next();

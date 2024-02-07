@@ -15,10 +15,12 @@ import { dbCheck } from "./dbCheckMiddleWare.js";
 
 export const configMiddleware = (app: any) => {
   app.use(express.json(), cors());
-  app.use(cacheControl, methodNotAllowed, badRequestHandler, errorHandler);
+  app.use(cacheControl, methodNotAllowed, badRequestHandler);
   app.use(dbCheck);
   app.use(basicAuthMiddleware);
   RegisterRoutes(app);
+
+  app.use(errorHandler);
 
   if (EnvConfiguration.NODE_ENV === Environment.DEVELOPMENT) {
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJson));
