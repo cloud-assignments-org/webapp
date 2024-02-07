@@ -1,7 +1,3 @@
-import { NextFunction } from "express";
-import { ValidateError } from "tsoa";
-import { QueryFailedError } from "typeorm";
-import { ServiceUnavailableError } from "../errorHandling/Errors.js";
 
 // setting up cache controll for the healthz end point
 export const cacheControl = (req:any, res:any, next:any) => {
