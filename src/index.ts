@@ -25,6 +25,8 @@ const checkDBConnectionRepeatedly = () => {
   // We try to see if we have established connection to the database, else we try doing it again after a given interval
   setInterval(() => {
 
+    // console.log("trying to connect to DB");
+
     if (!AppDataSource.isInitialized) {
 
       AppDataSource.initialize()
@@ -44,7 +46,7 @@ const checkDBConnectionRepeatedly = () => {
         })
         .catch(async (err) => {
           // catching errors - but don't want to pollute logs with a line every 1 second
-          // console.error("Error during Data Source initialization retrying in 1 second");
+          console.error("Error during Data Source initialization retrying in 1 second", err);
         });
     }
   }, 1000);
