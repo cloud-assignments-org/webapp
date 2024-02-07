@@ -84,4 +84,25 @@ describe("Testing methods in the user controller file", () => {
     expect(userController.getStatus()).toBe(400);
 
   })
+
+  it("Should not have password in the response and return all other user details", async () => {
+    
+    // Set up
+    const userDetails = Object.assign({}, newUserDetails);
+
+    // Execute
+    const userResponse = await userController.createUser(userDetails);
+
+    // Assert
+    // Has all the following properties
+    expect(userResponse).toHaveProperty("email");
+    expect(userResponse).toHaveProperty("firstName");
+    expect(userResponse).toHaveProperty("lastName");
+    expect(userResponse).toHaveProperty("id");
+    expect(userResponse).toHaveProperty("dateCreated");
+    expect(userResponse).toHaveProperty("lastModified");
+
+    // should not have password
+    expect(userResponse).not.toHaveProperty("password");
+  })
 });

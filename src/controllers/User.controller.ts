@@ -1,7 +1,9 @@
 import { Controller, Route } from "tsoa";
 import { User } from "../entities/User.js";
 import { hashPasswordAndEncode } from "../utils/bcryptHashing.util.js";
+import ModelMapper from "./ModelMapper.js";
 import { CreateUserAccount } from "./requestModels/CreateUserAccount.js";
+import { UserResponse } from "./responseModels/UserResponse.js";
 import { setEmail } from "./types/EmailT.js";
 
 @Route("/")
@@ -10,7 +12,7 @@ export class UserController extends Controller {
     super();
   }
 
-  async createUser(userDetails: CreateUserAccount) {
+  async createUser(userDetails: CreateUserAccount) : Promise<UserResponse | undefined> {
     const { email, firstName, lastName, password } = userDetails;
 
     // validate if email is in the right format
@@ -18,7 +20,7 @@ export class UserController extends Controller {
       setEmail(email);
     } catch (err) {
       this.setStatus(400);
-      return;
+      return undefined;
     }
 
     // create this user and save them in the db
@@ -31,7 +33,9 @@ export class UserController extends Controller {
 
     await newUser.save();
 
+    const response = ModelMapper(UserResponse, newUser);
+
     this.setStatus(201);
-    return;
+    return response;
   }
 }
