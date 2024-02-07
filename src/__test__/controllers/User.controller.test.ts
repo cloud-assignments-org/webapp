@@ -30,12 +30,14 @@ jest.mock("../../entities/User", () => {
 describe("Testing methods in the user controller file", () => {
   let userController: UserController;
   const mockFindUser = jest.fn();
+  const mockFindOneByUser = jest.fn();
 
   beforeAll(() => {
     userController = new UserController();
     mockFindUser.mockReset();
-
+    mockFindOneByUser.mockReset();
     User.find = mockFindUser;
+    User.findOneBy = mockFindOneByUser;
   });
 
   const newUserDetails = {
@@ -63,6 +65,7 @@ describe("Testing methods in the user controller file", () => {
   it("Should return 200 when a completely new user's detail is passed", async () => {
     // Set up - we have a new user
     const userDetails: CreateUserAccount = newUserDetails;
+    mockFindOneByUser.mockResolvedValueOnce(undefined);
 
     // Execute
     await userController.createUser(userDetails);
@@ -90,5 +93,19 @@ describe("Testing methods in the user controller file", () => {
 
     // should not have password
     expect(userResponse).not.toHaveProperty("password");
+  })
+
+  it("Should have the same value for created date and last updated", async () => {
+        // Set up
+        const userDetails = Object.assign({}, newUserDetails);
+
+        // Execute
+        const userResponse = await userController.createUser(userDetails);
+    
+        // Assert
+        // Has all the following properties
+        expect(userResponse).toHaveProperty("dateCreated");
+        expect(userResponse).toHaveProperty("lastModified");
+        expect(userResponse.lastModified).toEqual(userResponse.dateCreated);
   })
 });
