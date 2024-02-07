@@ -1,8 +1,17 @@
 import bcrypt from 'bcrypt';
 import { Buffer } from 'buffer';
+import { setEmail } from '../controllers/types/EmailT.js';
+import { BadInputError } from '../errorHandling/Errors.js';
 
 // Function to hash the password and encode it in Base64
 export async function hashPasswordAndEncode(emailId: string, password: string): Promise<string> {
+
+  try{
+    setEmail(emailId);
+  } catch (err) {
+    throw new BadInputError("Invalid email id provided");
+  }
+
   const saltRounds = 10; // You can adjust the salt rounds as needed
 
   try {
