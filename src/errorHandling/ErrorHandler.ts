@@ -1,4 +1,5 @@
 import { ErrorRequestHandler } from "express";
+import { ValidateError } from "tsoa";
 import { HTTPStatusCode } from "../utils/httpStatusCode.util.js";
 import {
   AuthError,
@@ -9,7 +10,9 @@ import {
 
 // noinspection JSUnusedLocalSymbols
 export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
-  if (error instanceof NotFoundError) {
+  if (error instanceof ValidateError) {
+    res.status(400).end();
+  } else if (error instanceof NotFoundError) {
     res.status(HTTPStatusCode.OK).end();
   } else if (error instanceof BadInputError) {
     res.status(HTTPStatusCode.BAD_REQUEST).end();
