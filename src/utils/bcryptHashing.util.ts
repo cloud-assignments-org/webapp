@@ -1,7 +1,10 @@
 import bcrypt from 'bcrypt';
 import { Buffer } from 'buffer';
+import { EnvConfiguration } from '../config/env.config.js';
 import { setEmail } from '../controllers/types/EmailT.js';
 import { BadInputError } from '../errorHandling/Errors.js';
+
+
 
 // Function to hash the password and encode it in Base64
 export async function hashPasswordAndEncode(emailId: string, password: string): Promise<string> {
@@ -12,11 +15,13 @@ export async function hashPasswordAndEncode(emailId: string, password: string): 
     throw new BadInputError("Invalid email id provided");
   }
 
-  const saltRounds = 10; // You can adjust the salt rounds as needed
+  // const saltRounds = 10; // You can adjust the salt rounds as needed
 
   try {
     // Generate a salt and hash the password
-    const salt = await bcrypt.genSalt(saltRounds);
+    // const salt = await bcrypt.genSalt(saltRounds);
+    const salt = EnvConfiguration.SALT;
+
     const hashedPassword = await bcrypt.hash(emailId+":"+password, salt);
 
     // Convert the hashed password to Base64

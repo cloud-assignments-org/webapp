@@ -143,13 +143,9 @@ describe("User Service", () => {
     });
 
     it("Should throw a BadInputError if none of the required properties are sent in for an update", async () => {
-      const mockIsValidFn = jest.fn();
 
       const updateInfo = {
-        isValid: mockIsValidFn,
       } as UpdateUserAccount;
-
-      mockIsValidFn.mockReturnValue(false);
 
       await expect(
         userService.updateUser(updateInfo, "test@gmail.com")
@@ -161,13 +157,12 @@ describe("User Service", () => {
     });
 
     it("Should throw an Auth error if the user does not exist in the database", async () => {
-      const mockIsValidFn = jest.fn();
 
       const updateInfo = {
-        isValid: mockIsValidFn,
+        password: "newPassword",
+        firstName: "newFirstName",
+        lastName: "newLastName"
       } as UpdateUserAccount;
-
-      mockIsValidFn.mockReturnValue(true);
 
       mockFindOneByUser.mockResolvedValueOnce(null);
 

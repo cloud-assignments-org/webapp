@@ -76,7 +76,7 @@ export default class UserService {
       throw new AuthError("Unauthenticated user");
     }
 
-    if (!updatedUserDetails.isValid()) {
+    if (!updatedUserDetails.firstName && !updatedUserDetails.lastName && !updatedUserDetails.password) {
       throw new BadInputError(
         "At least one property must be provided to update the user account."
       );
