@@ -44,3 +44,9 @@ export class ServiceUnavailableError extends Error {
     super(message);
   }
 }
+
+export class AuthError extends Error {
+  constructor(message?: string | undefined) {
+    super(message);
+  }
+}

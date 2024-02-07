@@ -1,23 +1,25 @@
 import { ErrorRequestHandler } from "express";
-import { BadInputError, BadRequestError, NotFoundError } from "./Errors.js";
+import { HTTPStatusCode } from "../utils/httpStatusCode.util.js";
+import {
+  AuthError,
+  BadInputError,
+  BadRequestError,
+  NotFoundError,
+} from "./Errors.js";
 
 // noinspection JSUnusedLocalSymbols
 export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
-    
-    if (error instanceof NotFoundError) {
-        res.status(404);
-    } else if (error instanceof BadInputError) {
-        res.status(400);
-    } else if (error instanceof BadRequestError) {
-        res.status(400);
-    }
-    // else if (error instanceof AuthError) {
-    //     logger.error("Auth error", error);
-    //     res.status(error.status).json({ error: error.message });
-    // } 
-    else {
-        console.log(error);
-        res.status(500);
-    } 
-    next();
+  if (error instanceof NotFoundError) {
+    res.status(HTTPStatusCode.OK);
+  } else if (error instanceof BadInputError) {
+    res.status(HTTPStatusCode.BAD_REQUEST);
+  } else if (error instanceof BadRequestError) {
+    res.status(HTTPStatusCode.BAD_REQUEST);
+  } else if (error instanceof AuthError) {
+    res.status(HTTPStatusCode.UNAUTHORIZED);
+  } else {
+    console.log(error);
+    res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR);
+  }
+  next();
 };
