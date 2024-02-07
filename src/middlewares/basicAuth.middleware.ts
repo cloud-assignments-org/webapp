@@ -40,7 +40,7 @@ export const basicAuthMiddleware = async (
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (passwordMatch) {
         req.user = {
-          username: user.email,
+          userName: user.email,
         }; // Attach user to request object
         next();
       } else {
