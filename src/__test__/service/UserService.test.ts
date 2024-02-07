@@ -176,4 +176,38 @@ describe("User Service", () => {
       ).rejects.toThrow(new AuthError("Unauthenticated user"));
     });
   });
+
+  describe("Get user", () => {
+    let userService: UserService;
+    const mockFindUser = jest.fn();
+    const mockFindOneByUser = jest.fn();
+    beforeEach(() => {
+      userService = new UserService();
+      mockFindUser.mockReset();
+      mockFindOneByUser.mockReset();
+      User.find = mockFindUser;
+      User.findOneBy = mockFindOneByUser;
+    });
+
+    it("Should throw an Auth Error when username is undefined or not a valid email id", async () => {
+      await expect(userService.getUser(undefined)).rejects.toThrow(
+        new AuthError("Unauthenticated user")
+      );
+
+      await expect(userService.getUser("")).rejects.toThrow(
+        new AuthError("Unauthenticated user")
+      );
+
+      await expect(
+        userService.getUser("invalid-Email-ID.4r432432@hcccwecb.com")
+      ).rejects.toThrow(new AuthError("Unauthenticated user"));
+    });
+    it("Should throw an Auth Error when user is not found in the db", async () => {
+      mockFindOneByUser.mockResolvedValueOnce(null);
+
+      await expect(userService.getUser("test@gmail.com")).rejects.toThrow(
+        new AuthError("Unauthenticated user")
+      );
+    });
+  });
 });

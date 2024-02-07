@@ -1,4 +1,13 @@
-import { Body, Controller, Patch, Post, Route, Security, Request } from "tsoa";
+import {
+  Body,
+  Controller,
+  Patch,
+  Post,
+  Route,
+  Security,
+  Request,
+  Get,
+} from "tsoa";
 import express from "express";
 import UserService from "../service/UserService.js";
 import ModelMapper from "./ModelMapper.js";
@@ -15,6 +24,18 @@ export class UserController extends Controller {
     this.userService = new UserService();
   }
 
+  @Get("user")
+  async getUser(@Request() req: express.Request) {
+    const userName = req.user?.userName;
+
+    const existingUser = await this.userService.getUser(userName);
+
+    const response = ModelMapper(UserResponse, existingUser);
+
+    this.setStatus(200);
+    return response;
+  }
+
   @Post("user")
   async createUser(
     @Body() userDetails: CreateUserAccount
@@ -26,6 +47,7 @@ export class UserController extends Controller {
     this.setStatus(201);
     return response;
   }
+
   @Patch("user")
   @Security("basicAuth")
   async updateUser(

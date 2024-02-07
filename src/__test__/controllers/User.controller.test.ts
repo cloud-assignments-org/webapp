@@ -34,7 +34,7 @@ describe("User Controller", () => {
   let userController: UserController;
   const mockFindUser = jest.fn();
   const mockFindOneByUser = jest.fn();
-  const  mockSaveUser = jest.fn();
+  const mockSaveUser = jest.fn();
 
   const newUserDetails = {
     email: "test@gmail.com",
@@ -150,7 +150,6 @@ describe("User Controller", () => {
 
       // Expect
       expect(userController.getStatus()).toBe(201);
-
     });
 
     it("Should not contain password in the response", async () => {
@@ -181,7 +180,10 @@ describe("User Controller", () => {
       } as unknown as express.Request;
 
       // Act
-      const response = await userController.updateUser(mockRequest, updatedUser);
+      const response = await userController.updateUser(
+        mockRequest,
+        updatedUser
+      );
 
       // Expect
       expect(response).not.toHaveProperty("password");
@@ -205,11 +207,11 @@ describe("User Controller", () => {
       existingUser.firstName = newUserDetails.firstName;
       existingUser.lastName = newUserDetails.lastName;
       existingUser.password = newUserDetails.password;
-      existingUser.dateCreated = new Date(new Date().getTime() - (5 * 60000));;
+      existingUser.dateCreated = new Date(new Date().getTime() - 5 * 60000);
 
       existingUser.save = mockSaveUser;
       mockFindOneByUser.mockResolvedValueOnce(existingUser);
-      
+
       const finalUpdatedUser = User.create();
       finalUpdatedUser.firstName = updatedUser.firstName;
       finalUpdatedUser.lastName = updatedUser.lastName;
@@ -217,7 +219,6 @@ describe("User Controller", () => {
       finalUpdatedUser.email = existingUser.email;
       finalUpdatedUser.dateCreated = existingUser.dateCreated;
       finalUpdatedUser.lastModified = new Date();
-
 
       const mockRequest = {
         user: {
@@ -228,7 +229,10 @@ describe("User Controller", () => {
       mockSaveUser.mockResolvedValueOnce(finalUpdatedUser);
 
       // Act
-      const response = await userController.updateUser(mockRequest, updatedUser);
+      const response = await userController.updateUser(
+        mockRequest,
+        updatedUser
+      );
 
       // Expect
       expect(response.lastModified).not.toEqual(response.dateCreated);
@@ -237,7 +241,38 @@ describe("User Controller", () => {
       const createdDate = new Date(response.dateCreated);
       const lastUpdatedDate = new Date(response.lastModified);
 
-      expect(lastUpdatedDate.getTime() - createdDate.getTime()).toBeGreaterThan(0);
+      expect(lastUpdatedDate.getTime() - createdDate.getTime()).toBeGreaterThan(
+        0
+      );
+    });
+  });
+
+  describe("Get User", () => {
+    it("Should return 200 for an authenticated user", async () => {
+      // Set up - here we assume that a user is authenticated,
+      // only then will the program execution reach the controller
+      // we need a user name that is passed in through the auth middleware
+      const userName = newUserDetails.email;
+
+      // we need to create a mock express request body that is patched in through the controller
+      const mockRequest = {
+        user: {
+          userName: userName,
+        } as unknown,
+      } as unknown as express.Request;
+
+      // return the user when we try user.find
+      const foundUser = User.create();
+      foundUser.email = userName;
+
+      mockFindOneByUser.mockResolvedValueOnce(foundUser);
+
+      // Act
+      await userController.getUser(mockRequest);
+
+      // Expect
+      // The controller to return a 200 status code
+      expect(userController.getStatus()).toBe(200);
     });
   });
 });
