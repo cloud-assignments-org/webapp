@@ -2,6 +2,7 @@ import { FindManyOptions } from "typeorm";
 import { User } from "../../entities/User";
 import { UserController } from "../../controllers/User.controller";
 import { CreateUserAccount } from "../../controllers/requestModels/CreateUserAccount";
+import { UpdateUserAccount } from "../../controllers/requestModels/UpdateUserAccount";
 import {
   mockCreate,
   mockSave,
@@ -11,6 +12,8 @@ import {
   mockCreateQueryBuilder,
   mockFindAndCount,
 } from "../TypeORMMocks";
+
+import express from "express";
 
 jest.mock("../../entities/User", () => {
   return {
@@ -27,18 +30,11 @@ jest.mock("../../entities/User", () => {
   };
 });
 
-describe("Testing methods in the user controller file", () => {
+describe("User Controller", () => {
   let userController: UserController;
   const mockFindUser = jest.fn();
   const mockFindOneByUser = jest.fn();
-
-  beforeAll(() => {
-    userController = new UserController();
-    mockFindUser.mockReset();
-    mockFindOneByUser.mockReset();
-    User.find = mockFindUser;
-    User.findOneBy = mockFindOneByUser;
-  });
+  const  mockSaveUser = jest.fn();
 
   const newUserDetails = {
     email: "test@gmail.com",
@@ -61,51 +57,187 @@ describe("Testing methods in the user controller file", () => {
       password: "$$$RRR",
     }),
   ];
-
-  it("Should return 200 when a completely new user's detail is passed", async () => {
-    // Set up - we have a new user
-    const userDetails: CreateUserAccount = newUserDetails;
-    mockFindOneByUser.mockResolvedValueOnce(undefined);
-
-    // Execute
-    await userController.createUser(userDetails);
-
-    // Assert
-    expect(userController.getStatus()).toBe(201);
+  beforeEach(() => {
+    userController = new UserController();
+    mockFindUser.mockReset();
+    mockFindOneByUser.mockReset();
+    User.find = mockFindUser;
+    User.findOneBy = mockFindOneByUser;
+    mockSaveUser.mockReset();
   });
 
-  it("Should not have password in the response and return all other user details", async () => {
-    
-    // Set up
-    const userDetails = Object.assign({}, newUserDetails);
+  describe("Create User", () => {
+    it("Should return 200 when a completely new user's detail is passed", async () => {
+      // Set up - we have a new user
+      const userDetails: CreateUserAccount = newUserDetails;
+      mockFindOneByUser.mockResolvedValueOnce(undefined);
 
-    // Execute
-    const userResponse = await userController.createUser(userDetails);
+      // Execute
+      await userController.createUser(userDetails);
 
-    // Assert
-    // Has all the following properties
-    expect(userResponse).toHaveProperty("email");
-    expect(userResponse).toHaveProperty("firstName");
-    expect(userResponse).toHaveProperty("lastName");
-    expect(userResponse).toHaveProperty("id");
-    expect(userResponse).toHaveProperty("dateCreated");
-    expect(userResponse).toHaveProperty("lastModified");
+      // Assert
+      expect(userController.getStatus()).toBe(201);
+    });
 
-    // should not have password
-    expect(userResponse).not.toHaveProperty("password");
-  })
+    it("Should not have password in the response and return all other user details", async () => {
+      // Set up
+      const userDetails = Object.assign({}, newUserDetails);
 
-  it("Should have the same value for created date and last updated", async () => {
-        // Set up
-        const userDetails = Object.assign({}, newUserDetails);
+      // Execute
+      const userResponse = await userController.createUser(userDetails);
 
-        // Execute
-        const userResponse = await userController.createUser(userDetails);
-    
-        // Assert
-        // Has all the following properties
-        expect(userResponse).toHaveProperty("dateCreated");
-        expect(userResponse).toHaveProperty("lastModified");
-        expect(userResponse.lastModified).toEqual(userResponse.dateCreated);
-  })
+      // Assert
+      // Has all the following properties
+      expect(userResponse).toHaveProperty("email");
+      expect(userResponse).toHaveProperty("firstName");
+      expect(userResponse).toHaveProperty("lastName");
+      expect(userResponse).toHaveProperty("id");
+      expect(userResponse).toHaveProperty("dateCreated");
+      expect(userResponse).toHaveProperty("lastModified");
+
+      // should not have password
+      expect(userResponse).not.toHaveProperty("password");
+    });
+
+    it("Should have the same value for created date and last updated", async () => {
+      // Set up
+      const userDetails = Object.assign({}, newUserDetails);
+
+      // Execute
+      const userResponse = await userController.createUser(userDetails);
+
+      // Assert
+      // Has all the following properties
+      expect(userResponse).toHaveProperty("dateCreated");
+      expect(userResponse).toHaveProperty("lastModified");
+      expect(userResponse.lastModified).toEqual(userResponse.dateCreated);
+    });
+  });
+
+  describe("Update User", () => {
+    /**
+     * 201: The request succeeded, and a new resource was created as a result. This is typically the response sent after POST requests, or some PUT requests.
+     */
+    it("Should return 201 when user information is succesfully updated", async () => {
+      // Set up
+      const mockIsValid = jest.fn();
+
+      const updatedUser: UpdateUserAccount = {
+        firstName: newUserDetails.firstName + "-updated",
+        lastName: newUserDetails.lastName + "-updated",
+        password: newUserDetails.password + "-updated",
+        isValid: mockIsValid,
+      };
+
+      mockIsValid.mockResolvedValueOnce(true);
+
+      const existingUser = User.create();
+      existingUser.email = newUserDetails.email;
+      existingUser.firstName = newUserDetails.firstName;
+      existingUser.lastName = newUserDetails.lastName;
+      existingUser.password = newUserDetails.password;
+
+      mockFindOneByUser.mockResolvedValueOnce(existingUser);
+
+      const mockRequest = {
+        user: {
+          userName: newUserDetails.email,
+        } as unknown,
+      } as unknown as express.Request;
+
+      // Act
+      await userController.updateUser(mockRequest, updatedUser);
+
+      // Expect
+      expect(userController.getStatus()).toBe(201);
+
+    });
+
+    it("Should not contain password in the response", async () => {
+      // Set up
+      const mockIsValid = jest.fn();
+
+      const updatedUser: UpdateUserAccount = {
+        firstName: newUserDetails.firstName + "-updated",
+        lastName: newUserDetails.lastName + "-updated",
+        password: newUserDetails.password + "-updated",
+        isValid: mockIsValid,
+      };
+
+      mockIsValid.mockResolvedValueOnce(true);
+
+      const existingUser = User.create();
+      existingUser.email = newUserDetails.email;
+      existingUser.firstName = newUserDetails.firstName;
+      existingUser.lastName = newUserDetails.lastName;
+      existingUser.password = newUserDetails.password;
+
+      mockFindOneByUser.mockResolvedValueOnce(existingUser);
+
+      const mockRequest = {
+        user: {
+          userName: newUserDetails.email,
+        } as unknown,
+      } as unknown as express.Request;
+
+      // Act
+      const response = await userController.updateUser(mockRequest, updatedUser);
+
+      // Expect
+      expect(response).not.toHaveProperty("password");
+    });
+
+    it("Should have a last updated date that is greater than the created date", async () => {
+      // Set up
+      const mockIsValid = jest.fn();
+
+      const updatedUser = {
+        firstName: newUserDetails.firstName + "-updated",
+        lastName: newUserDetails.lastName + "-updated",
+        password: newUserDetails.password + "-updated",
+        isValid: mockIsValid,
+      };
+
+      mockIsValid.mockResolvedValueOnce(true);
+
+      const existingUser = User.create();
+      existingUser.email = newUserDetails.email;
+      existingUser.firstName = newUserDetails.firstName;
+      existingUser.lastName = newUserDetails.lastName;
+      existingUser.password = newUserDetails.password;
+      existingUser.dateCreated = new Date(new Date().getTime() - (5 * 60000));;
+
+      existingUser.save = mockSaveUser;
+      mockFindOneByUser.mockResolvedValueOnce(existingUser);
+      
+      const finalUpdatedUser = User.create();
+      finalUpdatedUser.firstName = updatedUser.firstName;
+      finalUpdatedUser.lastName = updatedUser.lastName;
+      finalUpdatedUser.password = updatedUser.password;
+      finalUpdatedUser.email = existingUser.email;
+      finalUpdatedUser.dateCreated = existingUser.dateCreated;
+      finalUpdatedUser.lastModified = new Date();
+
+
+      const mockRequest = {
+        user: {
+          userName: newUserDetails.email,
+        } as unknown,
+      } as unknown as express.Request;
+
+      mockSaveUser.mockResolvedValueOnce(finalUpdatedUser);
+
+      // Act
+      const response = await userController.updateUser(mockRequest, updatedUser);
+
+      // Expect
+      expect(response.lastModified).not.toEqual(response.dateCreated);
+
+      // comparing dates
+      const createdDate = new Date(response.dateCreated);
+      const lastUpdatedDate = new Date(response.lastModified);
+
+      expect(lastUpdatedDate.getTime() - createdDate.getTime()).toBeGreaterThan(0);
+    });
+  });
 });
