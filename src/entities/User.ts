@@ -1,9 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, Column } from "typeorm"
+import { CloudBaseEntity } from "./CloudBaseEntity.js"
 
 @Entity()
-export class User {
+export class User extends CloudBaseEntity {
 
-    @PrimaryGeneratedColumn()
-    id!: number
+    @Column({type:"string"})
+    email!: string
+
+    @Column({type : "varying character"})
+    password!: string
+
+    @Column({type:"string"})
+    firstName!: string
+
+    @Column({type:"string"})
+    lastName!: string
 
 }
