@@ -10,6 +10,26 @@ import {
 import { hashPasswordAndEncode } from "../utils/bcryptHashing.util.js";
 
 export default class UserService {
+  async getUser(userName: EmailT | undefined): Promise<User> {
+    if (!userName) {
+      throw new AuthError("Unauthenticated user");
+    }
+
+    try {
+      setEmail(userName);
+    } catch (error) {
+      throw new AuthError("Unauthenticated user");
+    }
+
+    const user = await User.findOneBy({ email: userName });
+
+    if (!user) {
+      throw new AuthError("Unauthenticated user");
+    }
+
+    return user;
+  }
+
   async createUser(userData: CreateUserAccount): Promise<User> {
     const { email, firstName, lastName, password } = userData;
 
