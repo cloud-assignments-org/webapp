@@ -67,7 +67,7 @@ describe("User Controller", () => {
   });
 
   describe("Create User", () => {
-    it("Should return 200 when a completely new user's detail is passed", async () => {
+    it("Should return 201 when a completely new user's detail is passed", async () => {
       // Set up - we have a new user
       const userDetails: CreateUserAccount = newUserDetails;
       mockFindOneByUser.mockResolvedValueOnce(undefined);
@@ -120,16 +120,12 @@ describe("User Controller", () => {
      */
     it("Should return 201 when user information is succesfully updated", async () => {
       // Set up
-      const mockIsValid = jest.fn();
 
       const updatedUser: UpdateUserAccount = {
         firstName: newUserDetails.firstName + "-updated",
         lastName: newUserDetails.lastName + "-updated",
         password: newUserDetails.password + "-updated",
-        isValid: mockIsValid,
       };
-
-      mockIsValid.mockResolvedValueOnce(true);
 
       const existingUser = User.create();
       existingUser.email = newUserDetails.email;
@@ -154,16 +150,12 @@ describe("User Controller", () => {
 
     it("Should not contain password in the response", async () => {
       // Set up
-      const mockIsValid = jest.fn();
 
       const updatedUser: UpdateUserAccount = {
         firstName: newUserDetails.firstName + "-updated",
         lastName: newUserDetails.lastName + "-updated",
         password: newUserDetails.password + "-updated",
-        isValid: mockIsValid,
       };
-
-      mockIsValid.mockResolvedValueOnce(true);
 
       const existingUser = User.create();
       existingUser.email = newUserDetails.email;
@@ -191,16 +183,12 @@ describe("User Controller", () => {
 
     it("Should have a last updated date that is greater than the created date", async () => {
       // Set up
-      const mockIsValid = jest.fn();
 
       const updatedUser = {
         firstName: newUserDetails.firstName + "-updated",
         lastName: newUserDetails.lastName + "-updated",
         password: newUserDetails.password + "-updated",
-        isValid: mockIsValid,
       };
-
-      mockIsValid.mockResolvedValueOnce(true);
 
       const existingUser = User.create();
       existingUser.email = newUserDetails.email;

@@ -4,9 +4,9 @@ import {
   Patch,
   Post,
   Route,
-  Security,
   Request,
   Get,
+  SuccessResponse,
 } from "tsoa";
 import express from "express";
 import UserService from "../service/UserService.js";
@@ -37,6 +37,7 @@ export class UserController extends Controller {
   }
 
   @Post("user")
+  @SuccessResponse(201)
   async createUser(
     @Body() userDetails: CreateUserAccount
   ): Promise<UserResponse> {
@@ -49,7 +50,6 @@ export class UserController extends Controller {
   }
 
   @Patch("user")
-  @Security("basicAuth")
   async updateUser(
     @Request() req: express.Request,
     @Body() updatedUserDetails: UpdateUserAccount

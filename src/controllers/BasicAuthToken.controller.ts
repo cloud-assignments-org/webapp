@@ -1,7 +1,6 @@
 import { Route, Controller, Body, Post } from "tsoa";
 import { hashPasswordAndEncode } from "../utils/bcryptHashing.util.js";
 import { BasicAuthToken } from "./requestModels/BasicAuthToken.js";
-import { setEmail } from "./types/EmailT.js";
 
 @Route("/")
 export class BasicAuthController extends Controller {
