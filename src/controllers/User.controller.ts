@@ -7,6 +7,7 @@ import {
   Request,
   Get,
   SuccessResponse,
+  Put,
 } from "tsoa";
 import express from "express";
 import UserService from "../service/UserService.js";
@@ -15,7 +16,7 @@ import { CreateUserAccount } from "./requestModels/CreateUserAccount.js";
 import { UpdateUserAccount } from "./requestModels/UpdateUserAccount.js";
 import { UserResponse } from "./responseModels/UserResponse.js";
 
-@Route("/")
+@Route("/v1")
 export class UserController extends Controller {
   private userService: UserService;
   constructor() {
@@ -24,7 +25,7 @@ export class UserController extends Controller {
     this.userService = new UserService();
   }
 
-  @Get("user")
+  @Get("user/self")
   async getUser(@Request() req: express.Request) {
     const userName = req.user?.userName;
 
@@ -49,7 +50,7 @@ export class UserController extends Controller {
     return response;
   }
 
-  @Patch("user")
+  @Put("user/self")
   async updateUser(
     @Request() req: express.Request,
     @Body() updatedUserDetails: UpdateUserAccount
