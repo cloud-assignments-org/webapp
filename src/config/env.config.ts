@@ -16,9 +16,6 @@ class EnvConfiguration {
 
   // LOG
   static LOG_LEVEL = process.env.LOG_LEVEL;
-
-  // Salt
-  static SALT = process.env.SALT || "";
 }
 
 export enum Environment {
