@@ -37,26 +37,12 @@ describe("User Controller", () => {
   const mockSaveUser = jest.fn();
 
   const newUserDetails = {
-    email: "test@gmail.com",
-    firstName: "John",
-    lastName: "Doe",
+    username: "test@gmail.com",
+    first_name: "John",
+    last_name: "Doe",
     password: "test123",
   };
 
-  const existingUsers: User[] = [
-    User.create({
-      email: "test2@gmail.com",
-      firstName: "John2",
-      lastName: "Doe2",
-      password: "test1232",
-    }),
-    User.create({
-      email: "test3@gmail.com",
-      firstName: "John3",
-      lastName: "Doe3",
-      password: "$$$RRR",
-    }),
-  ];
   beforeEach(() => {
     userController = new UserController();
     mockFindUser.mockReset();
@@ -88,12 +74,12 @@ describe("User Controller", () => {
 
       // Assert
       // Has all the following properties
-      expect(userResponse).toHaveProperty("email");
-      expect(userResponse).toHaveProperty("firstName");
-      expect(userResponse).toHaveProperty("lastName");
+      expect(userResponse).toHaveProperty("username");
+      expect(userResponse).toHaveProperty("first_name");
+      expect(userResponse).toHaveProperty("last_name");
       expect(userResponse).toHaveProperty("id");
-      expect(userResponse).toHaveProperty("dateCreated");
-      expect(userResponse).toHaveProperty("lastModified");
+      expect(userResponse).toHaveProperty("account_created");
+      expect(userResponse).toHaveProperty("account_updated");
 
       // should not have password
       expect(userResponse).not.toHaveProperty("password");
@@ -108,9 +94,9 @@ describe("User Controller", () => {
 
       // Assert
       // Has all the following properties
-      expect(userResponse).toHaveProperty("dateCreated");
-      expect(userResponse).toHaveProperty("lastModified");
-      expect(userResponse.lastModified).toEqual(userResponse.dateCreated);
+      expect(userResponse).toHaveProperty("account_created");
+      expect(userResponse).toHaveProperty("account_updated");
+      expect(userResponse.account_updated).toEqual(userResponse.account_created);
     });
   });
 
@@ -122,22 +108,22 @@ describe("User Controller", () => {
       // Set up
 
       const updatedUser: UpdateUserAccount = {
-        firstName: newUserDetails.firstName + "-updated",
-        lastName: newUserDetails.lastName + "-updated",
+        first_name: newUserDetails.first_name + "-updated",
+        last_name: newUserDetails.last_name + "-updated",
         password: newUserDetails.password + "-updated",
       };
 
       const existingUser = User.create();
-      existingUser.email = newUserDetails.email;
-      existingUser.firstName = newUserDetails.firstName;
-      existingUser.lastName = newUserDetails.lastName;
+      existingUser.username = newUserDetails.username;
+      existingUser.first_name = newUserDetails.first_name;
+      existingUser.last_name = newUserDetails.last_name;
       existingUser.password = newUserDetails.password;
 
       mockFindOneByUser.mockResolvedValueOnce(existingUser);
 
       const mockRequest = {
         user: {
-          userName: newUserDetails.email,
+          userName: newUserDetails.username,
         } as unknown,
       } as unknown as express.Request;
 
@@ -152,22 +138,22 @@ describe("User Controller", () => {
       // Set up
 
       const updatedUser: UpdateUserAccount = {
-        firstName: newUserDetails.firstName + "-updated",
-        lastName: newUserDetails.lastName + "-updated",
+        first_name: newUserDetails.first_name + "-updated",
+        last_name: newUserDetails.last_name + "-updated",
         password: newUserDetails.password + "-updated",
       };
 
       const existingUser = User.create();
-      existingUser.email = newUserDetails.email;
-      existingUser.firstName = newUserDetails.firstName;
-      existingUser.lastName = newUserDetails.lastName;
+      existingUser.username = newUserDetails.username;
+      existingUser.first_name = newUserDetails.first_name;
+      existingUser.last_name = newUserDetails.last_name;
       existingUser.password = newUserDetails.password;
 
       mockFindOneByUser.mockResolvedValueOnce(existingUser);
 
       const mockRequest = {
         user: {
-          userName: newUserDetails.email,
+          userName: newUserDetails.username,
         } as unknown,
       } as unknown as express.Request;
 
@@ -185,15 +171,15 @@ describe("User Controller", () => {
       // Set up
 
       const updatedUser = {
-        firstName: newUserDetails.firstName + "-updated",
-        lastName: newUserDetails.lastName + "-updated",
+        first_name: newUserDetails.first_name + "-updated",
+        last_name: newUserDetails.last_name + "-updated",
         password: newUserDetails.password + "-updated",
       };
 
       const existingUser = User.create();
-      existingUser.email = newUserDetails.email;
-      existingUser.firstName = newUserDetails.firstName;
-      existingUser.lastName = newUserDetails.lastName;
+      existingUser.username = newUserDetails.username;
+      existingUser.first_name = newUserDetails.first_name;
+      existingUser.last_name = newUserDetails.last_name;
       existingUser.password = newUserDetails.password;
       existingUser.dateCreated = new Date(new Date().getTime() - 5 * 60000);
 
@@ -201,16 +187,16 @@ describe("User Controller", () => {
       mockFindOneByUser.mockResolvedValueOnce(existingUser);
 
       const finalUpdatedUser = User.create();
-      finalUpdatedUser.firstName = updatedUser.firstName;
-      finalUpdatedUser.lastName = updatedUser.lastName;
+      finalUpdatedUser.first_name = updatedUser.first_name;
+      finalUpdatedUser.last_name = updatedUser.last_name;
       finalUpdatedUser.password = updatedUser.password;
-      finalUpdatedUser.email = existingUser.email;
+      finalUpdatedUser.username = existingUser.username;
       finalUpdatedUser.dateCreated = existingUser.dateCreated;
       finalUpdatedUser.lastModified = new Date();
 
       const mockRequest = {
         user: {
-          userName: newUserDetails.email,
+          userName: newUserDetails.username,
         } as unknown,
       } as unknown as express.Request;
 
@@ -223,11 +209,11 @@ describe("User Controller", () => {
       );
 
       // Expect
-      expect(response.lastModified).not.toEqual(response.dateCreated);
+      expect(response.account_updated).not.toEqual(response.account_created);
 
       // comparing dates
-      const createdDate = new Date(response.dateCreated);
-      const lastUpdatedDate = new Date(response.lastModified);
+      const createdDate = new Date(response.account_created);
+      const lastUpdatedDate = new Date(response.account_updated);
 
       expect(lastUpdatedDate.getTime() - createdDate.getTime()).toBeGreaterThan(
         0
@@ -240,7 +226,7 @@ describe("User Controller", () => {
       // Set up - here we assume that a user is authenticated,
       // only then will the program execution reach the controller
       // we need a user name that is passed in through the auth middleware
-      const userName = newUserDetails.email;
+      const userName = newUserDetails.username;
 
       // we need to create a mock express request body that is patched in through the controller
       const mockRequest = {
@@ -251,7 +237,7 @@ describe("User Controller", () => {
 
       // return the user when we try user.find
       const foundUser = User.create();
-      foundUser.email = userName;
+      foundUser.username = userName;
 
       mockFindOneByUser.mockResolvedValueOnce(foundUser);
 

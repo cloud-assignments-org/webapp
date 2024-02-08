@@ -8,6 +8,7 @@ import {
   Get,
   SuccessResponse,
   Put,
+  Tags,
 } from "tsoa";
 import express from "express";
 import UserService from "../service/UserService.js";
@@ -26,7 +27,11 @@ export class UserController extends Controller {
   }
 
   @Get("user/self")
+  @Tags("authenticated")
   async getUser(@Request() req: express.Request) {
+    /**
+     * Get User Information
+     */
     const userName = req.user?.userName;
 
     const existingUser = await this.userService.getUser(userName);
@@ -38,10 +43,14 @@ export class UserController extends Controller {
   }
 
   @Post("user")
+  @Tags("public")
   @SuccessResponse(201)
   async createUser(
     @Body() userDetails: CreateUserAccount
   ): Promise<UserResponse> {
+    /**
+     * Create a user
+     */
     const newUser = await this.userService.createUser(userDetails);
 
     const response = ModelMapper(UserResponse, newUser);
@@ -51,10 +60,14 @@ export class UserController extends Controller {
   }
 
   @Put("user/self")
+  @Tags("authenticated")
   async updateUser(
     @Request() req: express.Request,
     @Body() updatedUserDetails: UpdateUserAccount
   ): Promise<UserResponse> {
+    /**
+     * Update user information
+     */
     let userName = req.user?.userName;
 
     const updatedUser = await this.userService.updateUser(

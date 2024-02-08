@@ -6,9 +6,9 @@ export class CloudBaseEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: "date",  default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: "timestamp without time zone",  default: () => "CURRENT_TIMESTAMP" })
   dateCreated!: Date;
 
-  @Column({ type: "date", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: "timestamp without time zone", default: () => "CURRENT_TIMESTAMP" })
   lastModified!: Date;
 }

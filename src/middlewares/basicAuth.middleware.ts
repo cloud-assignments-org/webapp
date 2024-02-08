@@ -33,7 +33,7 @@ export const basicAuthMiddleware = async (
 
     try {
       const user = await User.findOneBy({
-        email: username,
+        username: username,
       });
 
       if (!user) {
@@ -46,7 +46,7 @@ export const basicAuthMiddleware = async (
       const passwordMatch = hashedPassword === user.password;
       if (passwordMatch) {
         req.user = {
-          userName: user.email,
+          userName: user.username,
         }; // Attach user to request object
         next();
       } else {

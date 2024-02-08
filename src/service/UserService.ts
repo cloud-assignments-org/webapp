@@ -21,7 +21,7 @@ export default class UserService {
       throw new AuthError("Unauthenticated user");
     }
 
-    const user = await User.findOneBy({ email: userName });
+    const user = await User.findOneBy({ username: userName });
 
     if (!user) {
       throw new AuthError("Unauthenticated user");
@@ -31,33 +31,33 @@ export default class UserService {
   }
 
   async createUser(userData: CreateUserAccount): Promise<User> {
-    const { email, firstName, lastName, password } = userData;
+    const { username, first_name, last_name, password } = userData;
 
     // validate if email is in the right format
     try {
-      setEmail(email);
+      setEmail(username);
     } catch (err) {
-      throw new BadInputError("Invalid email provided " + email);
+      throw new BadInputError("Invalid email provided " + username);
     }
 
     // check if we already don't have a user with this email id
     const existingUser = await User.findOneBy({
-      email: email,
+      username: username,
     });
 
     if (existingUser) {
       throw new BadRequestError(
-        "User with email id " + email + " already exists."
+        "User with email id " + username + " already exists."
       );
     }
 
     // create this user and save them in the db
     const newUser = User.create();
 
-    newUser.email = email;
-    newUser.firstName = firstName;
-    newUser.lastName = lastName;
-    newUser.password = await hashPasswordAndEncode(email, password);
+    newUser.username = username;
+    newUser.first_name = first_name;
+    newUser.last_name = last_name;
+    newUser.password = await hashPasswordAndEncode(username, password);
 
     return await newUser.save();
   }
@@ -76,7 +76,7 @@ export default class UserService {
       throw new AuthError("Unauthenticated user");
     }
 
-    if (!updatedUserDetails.firstName && !updatedUserDetails.lastName && !updatedUserDetails.password) {
+    if (!updatedUserDetails.first_name && !updatedUserDetails.last_name && !updatedUserDetails.password) {
       throw new BadInputError(
         "At least one property must be provided to update the user account."
       );
@@ -84,17 +84,17 @@ export default class UserService {
 
     // get this user from the db
     const existingUser = await User.findOneBy({
-      email: userName,
+      username: userName,
     });
 
     if (!existingUser) {
       throw new AuthError("Unauthenticated user");
     }
 
-    const { firstName, lastName, password } = updatedUserDetails;
+    const { first_name, last_name, password } = updatedUserDetails;
 
-    if (firstName) existingUser.firstName = firstName;
-    if (lastName) existingUser.lastName = lastName;
+    if (first_name) existingUser.first_name = first_name;
+    if (last_name) existingUser.last_name = last_name;
     if (password)
       existingUser.password = await hashPasswordAndEncode(userName, password);
     // updating lastModified date
