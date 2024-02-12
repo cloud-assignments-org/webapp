@@ -28,7 +28,6 @@
   },
 
   "routes": {
-    "routesDir": "src/routes",
-    "authenticationModule": "./src/middlewares/tsoaAuthModule.ts"
+    "routesDir": "src/routes"
   }
 }
