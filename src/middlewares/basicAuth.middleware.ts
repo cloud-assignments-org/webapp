@@ -1,7 +1,7 @@
 // Custom middleware to authenticate using Basic Auth token
 import express from "express";
 import { User } from "../entities/User.js";
-import { hashPasswordAndEncode } from "../utils/bcryptHashing.util.js";
+import bcrypt from "bcrypt";
 
 /**
  * This is the basic auth middleware. Here we try to fetch the user details from the basic auth token provided by the user,
@@ -16,7 +16,10 @@ export const basicAuthMiddleware = async (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  if (req.path === "/user" && (req.method == "PATCH" || req.method == "GET")) {
+  if (
+    req.path === "/v1/user/self" &&
+    (req.method == "PUT" || req.method == "GET")
+  ) {
     const authHeader = req.headers.authorization;
 
     if (authHeader == undefined) {
@@ -30,23 +33,20 @@ export const basicAuthMiddleware = async (
 
     const [username, password] = credentials.split(":");
 
-
     try {
       const user = await User.findOneBy({
-        email: username,
+        username: username,
       });
 
       if (!user) {
         return res.status(401).end();
       }
 
-      // hashed password 
-      const hashedPassword = await hashPasswordAndEncode(username, password);
+      const match = await bcrypt.compare(credentials, user.password);
 
-      const passwordMatch = hashedPassword === user.password;
-      if (passwordMatch) {
+      if (match) {
         req.user = {
-          userName: user.email,
+          userName: user.username,
         }; // Attach user to request object
         next();
       } else {

@@ -30,7 +30,7 @@ export const configMiddleware = (app: any) => {
   app.use(basicAuthMiddleware);
   RegisterRoutes(app);
 
-  // app.use(errorHandler);
+  app.use(errorHandler);
 
   if (EnvConfiguration.NODE_ENV === Environment.DEVELOPMENT) {
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJson));
