@@ -47,53 +47,33 @@ describe("User Service", () => {
 
     // set up
     const newUserDetails = {
-      email: "test@gmail.com",
-      firstName: "John",
-      lastName: "Doe",
+      username: "test@gmail.com",
+      first_name: "John",
+      last_name: "Doe",
       password: "test123",
     };
 
     const existingUsersWithoutNewUser: User[] = [
       User.create({
-        email: "test2@gmail.com",
-        firstName: "John2",
-        lastName: "Doe2",
+        username: "test2@gmail.com",
+        first_name: "John2",
+        last_name: "Doe2",
         password: "test1232",
       }),
       User.create({
-        email: "test3@gmail.com",
-        firstName: "John3",
-        lastName: "Doe3",
+        username: "test3@gmail.com",
+        first_name: "John3",
+        last_name: "Doe3",
         password: "$$$RRR",
       }),
     ];
 
-    const existingUsersWithNewUser: User[] = [
-      User.create({
-        email: "test@gmail.com",
-        firstName: "John",
-        lastName: "Doe",
-        password: "test123",
-      }),
-      User.create({
-        email: "test2@gmail.com",
-        firstName: "John2",
-        lastName: "Doe2",
-        password: "test1232",
-      }),
-      User.create({
-        email: "test3@gmail.com",
-        firstName: "John3",
-        lastName: "Doe3",
-        password: "$$$RRR",
-      }),
-    ];
 
     it("Should throw a BadInput Error when an invalid email is passed in", async () => {
       const userDetails = Object.assign({}, newUserDetails);
-      userDetails.email = "3b87624fyfv44.dcjb.com";
+      userDetails.username = "3b87624fyfv44.dcjb.com";
       await expect(userService.createUser(userDetails)).rejects.toThrow(
-        new BadInputError("Invalid email provided " + userDetails.email)
+        new BadInputError("Invalid email provided " + userDetails.username)
       );
     });
 
@@ -101,12 +81,12 @@ describe("User Service", () => {
       // Set up
       const userDetails = Object.assign({}, newUserDetails);
 
-      const { email, firstName, lastName, password } = userDetails;
+      const { username, first_name, last_name, password } = userDetails;
 
       const existingUser = User.create();
-      existingUser.email = email;
-      existingUser.firstName = firstName;
-      existingUser.lastName = lastName;
+      existingUser.username = username;
+      existingUser.first_name = first_name;
+      existingUser.last_name = last_name;
       existingUser.password = password;
 
       mockFindOneByUser.mockResolvedValueOnce(existingUser);
@@ -114,7 +94,7 @@ describe("User Service", () => {
       // Act and expect
       await expect(userService.createUser(userDetails)).rejects.toThrow(
         new BadRequestError(
-          "User with email id " + userDetails.email + " already exists."
+          "User with email id " + userDetails.username + " already exists."
         )
       );
     });
