@@ -1,8 +1,8 @@
 import { EmailT } from "../types/EmailT.js";
 
 export class CreateUserAccount {
-    email!: EmailT;
+    username!: EmailT;
     password!: string;
-    firstName!: string;
-    lastName!: string;
+    first_name!: string;
+    last_name!: string;
 }

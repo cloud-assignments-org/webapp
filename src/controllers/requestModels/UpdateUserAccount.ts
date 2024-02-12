@@ -1,6 +1,6 @@
 export class UpdateUserAccount {
     password?: string;
-    firstName?: string;
-    lastName?: string;
+    first_name?: string;
+    last_name?: string;
 
 }
