@@ -9,6 +9,8 @@ on:
 # Jobs to be executed
 jobs:
   build:
+    name: "PRs to upstream from fork"
+
     runs-on: self-hosted
 
     steps:
