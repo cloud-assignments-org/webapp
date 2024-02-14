@@ -4,6 +4,7 @@ const config: JestConfigWithTsJest = {
   verbose: true,
   preset: "ts-jest",
   testEnvironment: 'node',
+  forceExit: true,
   transform: {
     "^.+\\.ts?$": [
       "ts-jest",

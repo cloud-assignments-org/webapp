@@ -1,9 +1,9 @@
 import "reflect-metadata";
-import express from "express";
 import { EnvConfiguration } from "./config/env.config.js";
 import { AppDataSource } from "./config/database.config.js";
 import { configMiddleware } from "./middlewares/index.js";
 import { DBConnection } from "./entities/DBConnection.js";
+import {app} from "./app.js";
 class Server {
   constructor() {
     this.bootstrap();
@@ -12,7 +12,6 @@ class Server {
   // bootstrap
   async bootstrap() {
     checkDBConnectionRepeatedly();
-    const app = express();
     configMiddleware(app);
     app.listen(EnvConfiguration.PORT, () => {
       console.log("TCP server established on port ", EnvConfiguration.PORT);
