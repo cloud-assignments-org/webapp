@@ -2,9 +2,8 @@ name: PRs to upstream from fork
 
 # Defines when the workflow should run
 on:
-  pull_request_target:
-    branches:
-      - main
+  pull_request:
+    types: [opened, synchronize]
 
 # Jobs to be executed
 jobs:
