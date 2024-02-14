@@ -181,7 +181,7 @@ describe("User Service", () => {
       mockFindOneByUser.mockResolvedValueOnce(null);
 
       await expect(userService.getUser("test@gmail.com")).rejects.toThrow(
-        new AuthError("Unauthenticated user")
+        new AuthError()
       );
     });
   });
