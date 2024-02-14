@@ -76,6 +76,7 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
+*.env*
 .env
 .env.development.local
 .env.test.local
@@ -131,3 +132,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Other random
+*.DS_Store*
+*swagger.json
+*routes.ts
