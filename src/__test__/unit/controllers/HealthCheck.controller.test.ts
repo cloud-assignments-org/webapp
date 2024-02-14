@@ -1,6 +1,6 @@
 import { FindManyOptions } from "typeorm";
-import { HealthCheckController } from "../../controllers/HealthCheck.controller";
-import { DBConnection } from "../../entities/DBConnection";
+import { HealthCheckController } from "../../../controllers/HealthCheck.controller";
+import { DBConnection } from "../../../entities/DBConnection";
 import {
   mockCreate,
   mockCreateQueryBuilder,
@@ -9,10 +9,10 @@ import {
   mockFindBy,
   mockFindOneBy,
   mockSave,
-} from "../TypeORMMocks";
+} from "../../TypeORMMocks";
 
 // Assuming HealthCheckController has a method that directly uses DBConnection
-jest.mock("../../entities/DBConnection", () => {
+jest.mock("../../../entities/DBConnection", () => {
   return {
     DBConnection: {
       // Mock static methods directly

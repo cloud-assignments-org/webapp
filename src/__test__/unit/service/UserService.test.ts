@@ -1,12 +1,12 @@
 import { FindManyOptions } from "typeorm";
-import { UpdateUserAccount } from "../../controllers/requestModels/UpdateUserAccount";
-import { User } from "../../entities/User";
+import { UpdateUserAccount } from "../../../controllers/requestModels/UpdateUserAccount";
+import { User } from "../../../entities/User";
 import {
   AuthError,
   BadInputError,
   BadRequestError,
-} from "../../errorHandling/Errors";
-import UserService from "../../service/UserService";
+} from "../../../errorHandling/Errors";
+import UserService from "../../../service/UserService";
 import {
   mockCreate,
   mockSave,
@@ -15,9 +15,9 @@ import {
   mockFindOneBy,
   mockCreateQueryBuilder,
   mockFindAndCount,
-} from "../TypeORMMocks";
+} from "../../TypeORMMocks";
 
-jest.mock("../../entities/User", () => {
+jest.mock("../../../entities/User", () => {
   return {
     User: {
       // Mock static methods directly
