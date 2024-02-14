@@ -1,4 +1,4 @@
-name: PRs to upstream from fork
+name: Integration Test
 
 # Defines when the workflow should run
 on:
@@ -9,25 +9,23 @@ on:
 # Jobs to be executed
 jobs:
   integration-test:
-    name: "PRs to upstream from fork"
-
     runs-on: self-hosted
 
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER_INTEGRATION }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB_INTEGRATION }}
-        ports:
-          - 5432:5432
-        # Optional: Set up health checks
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5    
+    # services:
+    #   postgres:
+    #     image: postgres:16
+    #     env:
+    #       POSTGRES_USER: ${{ secrets.POSTGRES_USER_INTEGRATION }}
+    #       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}
+    #       POSTGRES_DB: ${{ secrets.POSTGRES_DB_INTEGRATION }}
+    #     ports:
+    #       - 5432:5432
+    #     # Optional: Set up health checks
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5    
 
     steps:
     - name: Checkout code
