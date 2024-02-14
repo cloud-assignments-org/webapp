@@ -1,3 +1,11 @@
 import express from "express";
+import { configMiddleware } from "./middlewares/index.js";
 
-export const app = express();
+const createApp = () => {
+  const app = express();
+  configMiddleware(app);
+
+  return app;
+};
+
+export default createApp;
