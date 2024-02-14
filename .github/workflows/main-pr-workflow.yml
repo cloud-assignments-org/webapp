@@ -25,9 +25,7 @@ jobs:
       run: npm install
       # Installs npm dependencies
 
-    - name: Clean up
-      run: npm run clean-up
-      # Runs the clean-up script
+
 
     - name: Generate TSOA
       run: npm run generate-tsoa
