@@ -1,4 +1,4 @@
-name: PRs to upstream from fork
+name: Unit Test and Build
 
 # Defines when the workflow should run
 on:
@@ -8,8 +8,6 @@ on:
 # Jobs to be executed
 jobs:
   build:
-    name: "PRs to upstream from fork"
-
     runs-on: self-hosted
 
     steps:
