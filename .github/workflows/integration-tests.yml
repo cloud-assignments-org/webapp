@@ -33,11 +33,14 @@ jobs:
       run: |
         echo "Running as user: $(whoami)"  
 
+    - name: Ensure PostgreSQL is ready
+      run: sleep 10  # Adjust based on your needs
+
     - name: Configure PostgreSQL
       run: |
-        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
-        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
-        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+        docker exec ${{ job.services.postgres.id }} psql -v ON_ERROR_STOP=1 -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+        docker exec ${{ job.services.postgres.id }} psql -v ON_ERROR_STOP=1 -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+        docker exec ${{ job.services.postgres.id }} psql -v ON_ERROR_STOP=1 -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
       
     - name: Checkout code
       uses: actions/checkout@v2
