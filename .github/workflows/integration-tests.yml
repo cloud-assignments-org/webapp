@@ -59,16 +59,12 @@ jobs:
       run: sleep 10
 
     - name: Configure PostgreSQL
-      env:
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER_INTEGRATION }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB_INTEGRATION }}
       run: |
-        sudo -u postgres psql -c "CREATE ROLE $POSTGRES_USER WITH SUPERUSER CREATEDB LOGIN PASSWORD '$POSTGRES_PASSWORD';"
-        sudo -u postgres psql -c "CREATE DATABASE $POSTGRES_DB WITH OWNER $POSTGRES_USER;"
-        sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON SCHEMA public TO $POSTGRES_USER;"
-        sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO $POSTGRES_USER;"
-        sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $POSTGRES_DB TO $POSTGRES_USER;"  
+        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "CREATE ROLE ${{ secrets.POSTGRES_USER_INTEGRATION }} WITH SUPERUSER CREATEDB LOGIN PASSWORD '${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}';"
+        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} WITH OWNER ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
       
     - name: Run integration tests
       run: npm run integration
