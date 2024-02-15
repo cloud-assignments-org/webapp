@@ -33,6 +33,13 @@ jobs:
       run: |
         echo "Running as user: $(whoami)"  
 
+    - name: Configure PostgreSQL
+      run: |
+        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} WITH OWNER ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+      
     - name: Checkout code
       uses: actions/checkout@v2
       with:
@@ -55,17 +62,8 @@ jobs:
       run: npm run generate-tsoa
       # Generates TSOA routes and controllers
 
-    - name: Wait for PostgreSQL to be ready
-      run: sleep 10
 
-    - name: Configure PostgreSQL
-      run: |
-        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "CREATE ROLE ${{ secrets.POSTGRES_USER_INTEGRATION }} WITH SUPERUSER CREATEDB LOGIN PASSWORD '${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}';"
-        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} WITH OWNER ${{ secrets.POSTGRES_USER_INTEGRATION }};"
-        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
-        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
-        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
-      
+
     - name: Run integration tests
       run: npm run integration
       # Executes your integration tests                              
