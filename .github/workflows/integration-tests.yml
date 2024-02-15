@@ -67,5 +67,5 @@ jobs:
 
 
     - name: Run integration tests
-      run: npm run integration
+      run: npm run integration -- --verbose
       # Executes your integration tests                              
