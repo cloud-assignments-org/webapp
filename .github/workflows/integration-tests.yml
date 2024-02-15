@@ -11,21 +11,21 @@ jobs:
   integration-test:
     runs-on: self-hosted
 
-    # services:
-    #   postgres:
-    #     image: postgres:16
-    #     env:
-    #       POSTGRES_USER: ${{ secrets.POSTGRES_USER_INTEGRATION }}
-    #       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}
-    #       POSTGRES_DB: ${{ secrets.POSTGRES_DB_INTEGRATION }}
-    #     ports:
-    #       - 5432:5432
-    #     # Optional: Set up health checks
-    #     options: >-
-    #       --health-cmd pg_isready
-    #       --health-interval 10s
-    #       --health-timeout 5s
-    #       --health-retries 5    
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER_INTEGRATION }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB_INTEGRATION }}
+        ports:
+          - 5432:5432
+        # Optional: Set up health checks
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5    
 
     steps:
     - name: Checkout code
@@ -49,6 +49,21 @@ jobs:
     - name: Generate TSOA
       run: npm run generate-tsoa
       # Generates TSOA routes and controllers
+
+    - name: Wait for PostgreSQL to be ready
+      run: sleep 10
+
+    - name: Configure PostgreSQL
+      env:
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER_INTEGRATION }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB_INTEGRATION }}
+      run: |
+        sudo -u postgres psql -c "CREATE ROLE $POSTGRES_USER WITH SUPERUSER CREATEDB LOGIN PASSWORD '$POSTGRES_PASSWORD';"
+        sudo -u postgres psql -c "CREATE DATABASE $POSTGRES_DB WITH OWNER $POSTGRES_USER;"
+        sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON SCHEMA public TO $POSTGRES_USER;"
+        sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO $POSTGRES_USER;"
+        sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $POSTGRES_DB TO $POSTGRES_USER;"  
       
     - name: Run integration tests
       run: npm run integration
