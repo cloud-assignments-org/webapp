@@ -4,7 +4,7 @@
   "description": "repository for web applications",
   "main": "index.js",
   "scripts": {
-    "integration" : "NODE_ENV=integration npx jest --detectOpenHandles --runInBand --maxWorkers=2 --testMatch=\"**/integration/**\"",
+    "integration" : "NODE_ENV=integration npx jest --detectOpenHandles --runInBand --testMatch=\"**/integration/**\"",
     "test": "npx jest --detectOpenHandles --testMatch=\"**/unit/**\" ",
     "dev": "NODE_ENV=development nodemon --exec npx esrun src/index.ts",
     "clean-up": "rm -rf dist && rm -rf ./src/routes",
