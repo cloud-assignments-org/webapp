@@ -32,7 +32,7 @@ jobs:
       # Generates TSOA routes and controllers
 
     - name: Run tests
-      run: NODE_OPTIONS="--max-old-space-size=512" npm run test
+      run: NODE_OPTIONS="--max-old-space-size=1536" npm run test
       # Executes your tests
 
     - name: Compile TypeScript
