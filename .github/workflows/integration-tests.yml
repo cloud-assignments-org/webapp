@@ -21,6 +21,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get -y install postgresql postgresql-contrib
+        sudo systemctl start postgresql
 
     - name: Configure PostgreSQL
       run: |
