@@ -1,69 +1,42 @@
 name: Integration Test
 
-# Defines when the workflow should run
 on:
   pull_request:
     types: [opened, synchronize]
 
-
-# Jobs to be executed
 jobs:
   integration-test:
-    runs-on: self-hosted
-
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER_INTEGRATION }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB_INTEGRATION }}
-        ports:
-          - 5432:5432
-        # Optional: Set up health checks
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5    
+    runs-on: ubuntu-latest
 
     steps:
-
-    - name: Print current user
-      run: |
-        echo "Running as user: $(whoami)"  
-
-    - name: Ensure PostgreSQL is ready
-      run: sleep 10  # Adjust based on your needs
-
-    - name: Configure PostgreSQL
-      run: |
-        docker exec ${{ job.services.postgres.id }} psql -v ON_ERROR_STOP=1 -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
-        docker exec ${{ job.services.postgres.id }} psql -v ON_ERROR_STOP=1 -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
-        docker exec ${{ job.services.postgres.id }} psql -v ON_ERROR_STOP=1 -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
-      
     - name: Checkout code
       uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.pull_request.head.sha }} # use current PRs code
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '20.2.0' # Specify the Node.js version you need
+        node-version: '20.2.0'
+
+    - name: Install PostgreSQL
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install postgresql postgresql-contrib
+
+    - name: Configure PostgreSQL
+      run: |
+        sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }};"
+        sudo -u postgres psql -c "CREATE USER ${{ secrets.POSTGRES_USER_INTEGRATION }} WITH ENCRYPTED PASSWORD '${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}';"
+        sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
 
     - name: Create .env.integration file
       run: |
-        echo "${{ secrets.ENV_FILE_INTEGRATION }}" | base64 -d > .env.integration        
+        echo "${{ secrets.ENV_FILE_INTEGRATION }}" | base64 -d > .env.integration
 
     - name: Install dependencies
       run: npm install
-      # Installs npm dependencies
 
     - name: Generate TSOA
       run: npm run generate-tsoa
-      # Generates TSOA routes and controllers
 
     - name: Run integration tests
       run: NODE_OPTIONS="--max-old-space-size=1536" npm run integration -- --verbose
-      # Executes your integration tests                              
