@@ -64,8 +64,6 @@ jobs:
       run: npm run generate-tsoa
       # Generates TSOA routes and controllers
 
-
-
     - name: Run integration tests
-      run: npm run integration -- --verbose
+      run: NODE_OPTIONS="--max-old-space-size=512" npm run integration -- --verbose
       # Executes your integration tests                              
