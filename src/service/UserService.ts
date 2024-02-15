@@ -8,10 +8,11 @@ import {
   BadRequestError,
 } from "../errorHandling/Errors.js";
 import { hashPasswordAndEncode } from "../utils/bcryptHashing.util.js";
+import { checkForEmptyString } from "../utils/inputValidation.util.js";
 
 export default class UserService {
   async getUser(userName: EmailT | undefined): Promise<User> {
-    if (!userName) {
+    if (!userName || userName == "") {
       throw new AuthError("Unauthenticated user");
     }
 
@@ -32,6 +33,8 @@ export default class UserService {
 
   async createUser(userData: CreateUserAccount): Promise<User> {
     const { username, first_name, last_name, password } = userData;
+
+    checkForEmptyString(userData);
 
     // validate if email is in the right format
     try {
@@ -70,13 +73,19 @@ export default class UserService {
       throw new AuthError("Unauthenticated user");
     }
 
+    checkForEmptyString(updatedUserDetails);
+
     try {
       setEmail(userName);
     } catch (err) {
       throw new AuthError("Unauthenticated user");
     }
 
-    if (!updatedUserDetails.first_name && !updatedUserDetails.last_name && !updatedUserDetails.password) {
+    if (
+      !updatedUserDetails.first_name &&
+      !updatedUserDetails.last_name &&
+      !updatedUserDetails.password
+    ) {
       throw new BadInputError(
         "At least one property must be provided to update the user account."
       );
