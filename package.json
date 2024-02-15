@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "integration" : "NODE_ENV=integration npx jest --detectOpenHandles --runInBand --testMatch=\"**/integration/**\"",
-    "test": "npx jest --detectOpenHandles --testMatch=\"**/unit/**\" ",
+    "test": "npx jest --detectOpenHandles --runInBand --testMatch=\"**/unit/**\" ",
     "dev": "NODE_ENV=development nodemon --exec npx esrun src/index.ts",
     "clean-up": "rm -rf dist && rm -rf ./src/routes",
     "generate-tsoa": "tsoa spec-and-routes",
