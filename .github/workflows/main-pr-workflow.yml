@@ -8,7 +8,7 @@ on:
 # Jobs to be executed
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
@@ -24,8 +24,6 @@ jobs:
     - name: Install dependencies
       run: npm install
       # Installs npm dependencies
-
-
 
     - name: Generate TSOA
       run: npm run generate-tsoa
