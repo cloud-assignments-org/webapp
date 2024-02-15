@@ -35,7 +35,6 @@ jobs:
 
     - name: Configure PostgreSQL
       run: |
-        docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} WITH OWNER ${{ secrets.POSTGRES_USER_INTEGRATION }};"
         docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
         docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
         docker exec ${{ job.services.postgres.id }} psql -U ${{ secrets.POSTGRES_USER_INTEGRATION }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
