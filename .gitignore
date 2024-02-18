@@ -137,3 +137,55 @@ dist
 *.DS_Store*
 *swagger.json
 *routes.ts
+
+
+## Hashicorp files
+# Local Terraform directories
+.terraform/
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+
+# Exclude all .tfvars files that might contain sensitive data, such as
+# password, private keys, and other secrets. Alternatively, consider using
+# .tfvars files for non-sensitive data and using environment variables or
+# encryption for sensitive values.
+*.tfvars
+*.tfvars.json
+
+# Ignore override files as they are usually used for local overrides.
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore the workspace files as they might contain sensitive information
+# and are generally user-specific.
+**/.terraform/*
+*.tfstate.d/
+
+# Ignore .terraform.lock.hcl file to prevent conflicts between different
+# Terraform versions and provider configurations. However, consider including
+# this file if you aim for consistent provider versions across environments.
+# .terraform.lock.hcl
+
+# Ignore any .log or .out files that may be generated during Terraform operations.
+*.log
+*.out
+
+# Other files
+**/backupFiles/*
+*.json*
+*.tfvars*
+
+
+# Packer
+*.pkvars.hcl
