@@ -10,8 +10,8 @@ packer {
 source "googlecompute" "centos" {
   project_id = var.project_id
   zone       = var.zone
-  source_image_family = "centos-8"
-  source_image_project_id = ["centos-cloud"]
+  source_image_family = var.source_image_family
+  source_image_project_id = var.source_image_project
   ssh_username = "packer"
   image_name   = var.image_name
 }
