@@ -1,0 +1,122 @@
+name: Packer image build
+on:
+  pull_request_target:
+    types:
+      - closed
+
+jobs:
+  packer_image_build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    # Setps to be executed
+    steps:
+    
+    - name: Indicate start of flow
+      run: |
+        echo The PR was merged
+
+    
+    # Run the integration test
+    # ============================
+
+    - name: Starting integration test
+      run: |
+        echo Starting integration test
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20.2.0'
+
+    - name: Install PostgreSQL
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install postgresql postgresql-contrib
+        sudo systemctl start postgresql
+
+    - name: Configure PostgreSQL
+      run: |
+        sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }};"
+        sudo -u postgres psql -c "CREATE USER ${{ secrets.POSTGRES_USER_INTEGRATION }} WITH ENCRYPTED PASSWORD '${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}';"
+        sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+
+    - name: Create .env.integration file
+      run: |
+        echo "${{ secrets.ENV_FILE_INTEGRATION }}" | base64 -d > .env.integration
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Generate TSOA
+      run: npm run generate-tsoa
+
+    - name: Run integration tests
+      run: NODE_OPTIONS="--max-old-space-size=1536" npm run integration -- --verbose    
+
+    - name: Integration test END
+      run: |
+        echo Integration test completed successfully
+
+    # Building the application artifact
+    # ============================
+
+    - name: Create .env.development file
+      run: |
+        echo "${{ secrets.ENV_FILE_DEVELOPMENT }}" | base64 -d > .env.development
+      
+    # Runs the TypeScript compiler to generate build files
+    - name: Compile built files
+      run: npm run compile
+
+    # Archiving the build artifact
+    - name: Archive built files
+      run: tar -czvf dist.tar.gz dist
+      # This creates an archive of the dist folder named dist.tar.gz
+
+    - name: Upload built files as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: built-files-dist-folder
+        path: dist.tar.gz
+
+    
+    # Start packer building process
+    - name: Switching to packer working directory
+      run: |
+        cd ./packer/imageBuilding
+
+    # Downloading dist.tar.gz to the packer/imageBuilding folder in the pipeline
+    - name: Download built files artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: built-files-dist-folder
+        path: ./.
+
+    # Start the image building process
+    # ============================
+
+    - name: Setup `packer`
+      uses: hashicorp/setup-packer@main
+      id: setup
+      with:
+        version: "latest"   
+
+    - name: Initialize Packer
+      run: packer init .
+
+    - name: Decode Variable File
+      run: |
+        echo "${{ secrets.PACKER_VAR_FILE_BASE64 }}" | base64 --decode > variables.auto.pkvars.hcl       
+
+    - name: Setup Environment Variable
+      run: echo "PKR_VAR_image_name=web-app-image-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV  
+
+    - name: Print Image Name
+      run: echo $PKR_VAR_image_name
+
+    - name: Build Image
+      run: packer build -force -var-file=./variables.auto.pkvars.hcl .
