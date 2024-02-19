@@ -189,3 +189,7 @@ terraform.rc
 
 # Packer
 *.pkvars.hcl
+
+## SSH credentials
+*.pub
+tf-packer
