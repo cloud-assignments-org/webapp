@@ -32,9 +32,11 @@ jobs:
         run: |
           echo "${{ secrets.PACKER_VAR_FILE_BASE64 }}" | base64 --decode > variables.auto.pkvars.hcl       
 
-      - name: Set packer variables
-        run: |
-          export PKR_VAR_image_name="web-app-image-$(date +%Y%m%d%H%M%S)"    
+      - name: Setup Environment Variable
+        run: echo "PKR_VAR_image_name=web-app-image-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV  
 
+      - name: Print Environment Variable
+        run: echo $PKR_VAR_image_name
+        
       - name: Validate Packer template
         run: packer validate -var-file=./variables.auto.pkvars.hcl . 
