@@ -12,10 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Packer
-        uses: hashicorp/setup-packer@v1
+      - name: Setup `packer`
+        uses: hashicorp/setup-packer@main
+        id: setup
         with:
-          packer_version: '1.7.0'
+          version: "latest"          
 
       - name: Format Packer template
         run: packer fmt -check -recursive .
