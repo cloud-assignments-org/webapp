@@ -89,6 +89,9 @@ jobs:
       run: |
         cd ./packer/imageBuilding
 
+    - name: List all files in this direcrory
+      run: ls -lah .        
+
     # Downloading dist.tar.gz to the packer/imageBuilding folder in the pipeline
     - name: Download built files artifact
       uses: actions/download-artifact@v2
