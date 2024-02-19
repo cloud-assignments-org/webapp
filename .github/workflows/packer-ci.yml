@@ -19,28 +19,29 @@ jobs:
         uses: hashicorp/setup-packer@main
         id: setup
         with:
-          version: "latest"        
+          version: "latest"
 
       - name: Initialize Packer
         run: packer init .
-
 
       - name: Format Packer template
         run: packer fmt -check -recursive .
 
       - name: Decode Variable File
         run: |
-          echo "${{ secrets.PACKER_VAR_FILE_BASE64 }}" | base64 --decode > variables.auto.pkvars.hcl       
-
-      - name: Decode public key
-        run: |
-          echo "${{ secrets.PACKER_PUB_KEY_BASE64 }}" | base64 --decode > tf-packer.pub     
+          echo "${{ secrets.PACKER_VAR_FILE_BASE64 }}" | base64 --decode > variables.auto.pkvars.hcl
 
       - name: Setup Environment Variable
-        run: echo "PKR_VAR_image_name=web-app-image-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV  
+        run: echo "PKR_VAR_image_name=web-app-image-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
       - name: Print Environment Variable
         run: echo $PKR_VAR_image_name
-        
+
+      - name: Create dummy dist.tar.gz if not present
+        run: |
+          if [ ! -f ./dist.tar.gz ]; then
+            mkdir -p . && touch ./dist.tar.gz
+          fi
+
       - name: Validate Packer template
-        run: packer validate -var-file=./variables.auto.pkvars.hcl . 
+        run: packer validate -var-file=./variables.auto.pkvars.hcl .
