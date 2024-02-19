@@ -16,7 +16,7 @@ sudo chmod 700 /home/centos/.ssh
 sudo cp /tmp/tf-packer.pub /home/centos/.ssh/authorized_keys
 sudo chmod 600 /home/centos/.ssh/authorized_keys
 sudo chown -R centos /home/centos/.ssh
-sudo usermod --shell /bin/bash centos
+# sudo usermod --shell /bin/bash centos
 
 echo "End of setup step"
 

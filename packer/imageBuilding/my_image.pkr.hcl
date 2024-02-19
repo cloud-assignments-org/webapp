@@ -31,6 +31,18 @@ build {
   }
 
   provisioner "file" {
+    source      = "../scripts/databaseSetup.sh"
+    destination = "/tmp/databaseSetup.sh"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "chmod +x /tmp/databaseSetup.sh",
+      "sh /tmp/databaseSetup.sh"
+    ]
+  }
+  
+  provisioner "file" {
     source      = "../scripts/environmentSetUp.sh"
     destination = "/tmp/environmentSetUp.sh"
   }
@@ -42,15 +54,4 @@ build {
     ]
   }
 
-  provisioner "file" {
-    source      = "../scripts/databaseSetup.sh"
-    destination = "/tmp/databaseSetup.sh"
-  }
-
-  provisioner "shell" {
-    inline = [
-      "chmod +x /tmp/databaseSetup.sh",
-      "sh /tmp/databaseSetup.sh"
-    ]
-  }
 }
