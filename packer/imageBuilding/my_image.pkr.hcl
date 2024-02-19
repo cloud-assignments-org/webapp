@@ -21,6 +21,16 @@ build {
     "source.googlecompute.centos",
   ]
 
+  # Run this later if you also need to provide ssh access to this machine
+  # provisioner "file" {
+  #   source      = "./tf-packer.pub"
+  #   destination = "/tmp/tf-packer.pub"
+  # }
+
+  # provisioner "shell" {
+  #   script = "../scripts/sshSetUp.sh"
+  # }
+
   provisioner "file" {
     source      = "./tf-packer.pub"
     destination = "/tmp/tf-packer.pub"
