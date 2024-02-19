@@ -41,7 +41,7 @@ build {
       "sh /tmp/databaseSetup.sh"
     ]
   }
-  
+
   provisioner "file" {
     source      = "../scripts/environmentSetUp.sh"
     destination = "/tmp/environmentSetUp.sh"
