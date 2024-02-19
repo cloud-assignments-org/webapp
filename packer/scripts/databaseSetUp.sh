@@ -10,22 +10,22 @@ sudo dnf -y install postgresql16-server postgresql16 postgresql-contrib
 sudo /usr/pgsql-16/bin/postgresql-16-setup initdb
 sudo systemctl enable --now postgresql-16
 
-# Move to postgres user to create assignment 2 user and assign previlidges to run application
-su - postgres
-
 echo "Creating roles "
-# Create a PostgreSQL user and database
-psql -c "CREATE ROLE assignment2 WITH SUPERUSER CREATEDB LOGIN PASSWORD 'assignment2';"
-psql -c "CREATE DATABASE assignment2;"
-psql -c "GRANT ALL PRIVILEGES ON SCHEMA public TO assignment2;"
-psql -c "GRANT ALL PRIVILEGES ON DATABASE assignment2 TO assignment2;"
-psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO assignment2;"
 
-psql -c "CREATE ROLE integration WITH SUPERUSER CREATEDB LOGIN PASSWORD 'integration';"
-psql -c "CREATE DATABASE integration;"
-psql -c "GRANT ALL PRIVILEGES ON SCHEMA public TO integration;"
-psql -c "GRANT ALL PRIVILEGES ON DATABASE integration TO integration;"
-psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO integration;"
+# Move to postgres user to create assignment 2 user and assign previlidges to run application
+
+# Create a PostgreSQL user and database
+sudo -u postgres psql -c "CREATE ROLE assignment2 WITH SUPERUSER CREATEDB LOGIN PASSWORD 'assignment2';"
+sudo -u postgres psql -c "CREATE DATABASE assignment2;"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON SCHEMA public TO assignment2;"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE assignment2 TO assignment2;"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO assignment2;"
+
+sudo -u postgres psql -c "CREATE ROLE integration WITH SUPERUSER CREATEDB LOGIN PASSWORD 'integration';"
+sudo -u postgres psql -c "CREATE DATABASE integration;"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON SCHEMA public TO integration;"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE integration TO integration;"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO integration;"
 
 echo "Exiting postgres setup"
 exit 0
