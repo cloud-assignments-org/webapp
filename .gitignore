@@ -194,3 +194,4 @@ terraform.rc
 *.pub
 tf-packer
 *.base64
+*.tar.gz
