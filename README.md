@@ -42,6 +42,7 @@ Clone the project repository to your local machine via SSH. Use the command:
 1. [Setting up the database](./Documentation/DBSetup.md)
 2. [Troubleshooting](./Documentation/Troubleshooting.md)
 3. [Health Check API](./Documentation/HealthcheckAPI.md)
+4. [Setting up packer](./Documentation/PackerSetup.md)
 
 ## API Endpoints
 
