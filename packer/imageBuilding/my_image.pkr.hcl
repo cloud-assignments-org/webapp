@@ -31,14 +31,14 @@ build {
   }
 
   provisioner "file" {
-    source      = "../scripts/databaseSetup.sh"
-    destination = "/tmp/databaseSetup.sh"
+    source      = "../scripts/databaseSetUp.sh"
+    destination = "/tmp/databaseSetUp.sh"
   }
 
   provisioner "shell" {
     inline = [
-      "chmod +x /tmp/databaseSetup.sh",
-      "sh /tmp/databaseSetup.sh"
+      "chmod +x /tmp/databaseSetUp.sh",
+      "sh /tmp/databaseSetUp.sh"
     ]
   }
 
