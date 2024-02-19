@@ -9,7 +9,7 @@
     "dev": "NODE_ENV=development nodemon --exec npx esrun src/index.ts",
     "clean-up": "rm -rf dist && rm -rf ./src/routes",
     "generate-tsoa": "tsoa spec-and-routes",
-    "compile": "npx tsc",
+    "compile": "NODE_ENV=development npx tsc",
     "build": "npm run clean-up && npm run generate-tsoa && npm run test && npm run compile",
     "serve": "NODE_ENV=development node dist/src/index.js",
     "demo": "npm run build && npm run serve"
