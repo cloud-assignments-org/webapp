@@ -7,6 +7,9 @@ on:
 jobs:
   packer-validation:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./packer/imageBuilding
 
     steps:
       - name: Checkout code
@@ -16,16 +19,17 @@ jobs:
         uses: hashicorp/setup-packer@main
         id: setup
         with:
-          version: "latest"          
+          version: "latest"        
+
+      - name: Initialize Packer
+        run: packer init .
 
       - name: Format Packer template
         run: packer fmt -check -recursive .
 
       - name: Decode Variable File
         run: |
-          echo "${{ secrets.PACKER_VAR_FILE_BASE64 }}" | base64 --decode > variables.auto.pkvars.hcl
-        working-directory: ./packer/imageBuilding        
+          echo "${{ secrets.PACKER_VAR_FILE_BASE64 }}" | base64 --decode > variables.auto.pkvars.hcl       
 
       - name: Validate Packer template
         run: packer validate -var-file=./variables.auto.pkvars.hcl . 
-        working-directory: ./packer/imageBuilding 
