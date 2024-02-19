@@ -32,12 +32,29 @@ build {
   # }
 
   provisioner "file" {
-    source      = "./tf-packer.pub"
-    destination = "/tmp/tf-packer.pub"
+    source      = "../scripts/csye6225User.sh"
+    destination = "/tmp/csye6225User.sh"
   }
 
   provisioner "shell" {
-    script = "../scripts/sshSetUp.sh"
+    inline = [
+      "chmod +x /tmp/csye6225User.sh",
+      "sh /tmp/csye6225User.sh"
+    ]
+  }
+
+  provisioner "file" {
+    source      = "dist.tar.gz"
+    destination = "/tmp/dist.tar.gz"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "mkdir -p ./webapp",
+      "tar -xzvf /tmp/dist.tar.gz -C ./webapp",
+      "sudo chown -R csye6225:csye6225 ./webapp",
+      "rm /tmp/dist.tar.gz"
+    ]
   }
 
   provisioner "file" {
