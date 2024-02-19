@@ -1,0 +1,30 @@
+name: Packer CI
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  packer-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Packer
+        uses: hashicorp/setup-packer@v1
+        with:
+          packer_version: '1.7.0'
+
+      - name: Format Packer template
+        run: packer fmt -check -recursive .
+
+      - name: Decode Variable File
+        run: |
+          echo "${{ secrets.PACKER_VAR_FILE_BASE64 }}" | base64 --decode > variables.auto.pkvars.hcl
+        working-directory: ./packer/imageBuilding        
+
+      - name: Validate Packer template
+        run: packer validate -var-file=./variables.auto.pkvars.hcl . 
+        working-directory: ./packer/imageBuilding 

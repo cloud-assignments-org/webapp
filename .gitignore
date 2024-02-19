@@ -193,3 +193,4 @@ terraform.rc
 ## SSH credentials
 *.pub
 tf-packer
+*.base64
