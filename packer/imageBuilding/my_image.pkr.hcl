@@ -70,9 +70,9 @@ build {
       "sudo chown -R csye6225:csye6225 .", // dist
       "rm /tmp/dist.tar.gz",
       "echo Code files extracted",
-      "ls -alh .",
+      "sudo ls -alh .",
       "echo installing dependencies",
-      "npm ci --omit=dev" // creates node modules
+      "sudo npm ci --omit=dev" // creates node modules
     ]
   }
 
