@@ -57,7 +57,7 @@ build {
 
   provisioner "shell" {
     inline = [
-      "pwd"
+      "pwd",
       "echo Setting up Database",
       "chmod +x /tmp/databaseSetUp.sh",
       "sh /tmp/databaseSetUp.sh"
@@ -71,8 +71,8 @@ build {
 
   provisioner "shell" {
     inline = [
-      "pwd"
-      "echo Setting up node and other dependencies"
+      "pwd",
+      "echo Setting up node and other dependencies",
       "chmod +x /tmp/environmentSetUp.sh",
       "sh /tmp/environmentSetUp.sh"
     ]
@@ -85,7 +85,7 @@ build {
 
   provisioner "shell" {
     inline = [
-      "echo Extracting code files to current directory"
+      "echo Extracting code files to current directory",
       "pwd",
       "tar -xzvf /tmp/dist.tar.gz -C .", // dist
       "sudo chown -R csye6225:csye6225 .", // dist
@@ -93,7 +93,7 @@ build {
       "mv dist/* .", // src package.json package.lock.json
       "rm -rf dist/",
       "echo Code files extracted",
-      "ls -alh ."
+      "ls -alh .",
       "echo installing dependencies",
       "npm ci --omit=dev" // creates node modules
     ]
