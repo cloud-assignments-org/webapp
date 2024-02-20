@@ -50,9 +50,12 @@ build {
 
   provisioner "shell" {
     inline = [
+      "cd ../home/csye6225/",
       "tar -xzvf /tmp/dist.tar.gz -C .",
       "sudo chown -R csye6225:csye6225 .",
-      "rm /tmp/dist.tar.gz"
+      "rm /tmp/dist.tar.gz",
+      "mv dist/src/* .",
+      "rm -rf dist/"
     ]
   }
 
@@ -64,6 +67,7 @@ build {
   provisioner "shell" {
     inline = [
       "chmod +x /tmp/databaseSetUp.sh",
+      "pwd",
       "sh /tmp/databaseSetUp.sh"
     ]
   }
@@ -76,6 +80,7 @@ build {
   provisioner "shell" {
     inline = [
       "chmod +x /tmp/environmentSetUp.sh",
+      "pwd",
       "sh /tmp/environmentSetUp.sh"
     ]
   }
