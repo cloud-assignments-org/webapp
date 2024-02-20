@@ -50,9 +50,8 @@ build {
 
   provisioner "shell" {
     inline = [
-      "mkdir -p ./webapp",
-      "tar -xzvf /tmp/dist.tar.gz -C ./webapp",
-      "sudo chown -R csye6225:csye6225 ./webapp",
+      "tar -xzvf /tmp/dist.tar.gz -C .",
+      "sudo chown -R csye6225:csye6225 .",
       "rm /tmp/dist.tar.gz"
     ]
   }
