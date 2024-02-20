@@ -44,20 +44,6 @@ build {
   }
 
   provisioner "file" {
-    source      = "../scripts/databaseSetUp.sh"
-    destination = "/tmp/databaseSetUp.sh"
-  }
-
-  provisioner "shell" {
-    inline = [
-      "sudo pwd",
-      "echo Setting up Database",
-      "sudo chmod +x /tmp/databaseSetUp.sh",
-      "sudo sh /tmp/databaseSetUp.sh"
-    ]
-  }
-
-  provisioner "file" {
     source      = "../scripts/environmentSetUp.sh"
     destination = "/tmp/environmentSetUp.sh"
   }
@@ -83,12 +69,26 @@ build {
       "tar -xzvf /tmp/dist.tar.gz -C .",   // dist
       "sudo chown -R csye6225:csye6225 .", // dist
       "rm /tmp/dist.tar.gz",
-      "sudo mv dist/* .", // src package.json package.lock.json
-      "rm -rf dist/",
+      "mv ./dist/* .", // src package.json package.lock.json
+      "rm -rf ./dist/",
       "echo Code files extracted",
       "ls -alh .",
       "echo installing dependencies",
-      "sudo npm ci --omit=dev" // creates node modules
+      "npm ci --omit=dev" // creates node modules
+    ]
+  }
+
+  provisioner "file" {
+    source      = "../scripts/databaseSetUp.sh"
+    destination = "/tmp/databaseSetUp.sh"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "sudo pwd",
+      "echo Setting up Database",
+      "sudo chmod +x /tmp/databaseSetUp.sh",
+      "sudo sh /tmp/databaseSetUp.sh"
     ]
   }
 
