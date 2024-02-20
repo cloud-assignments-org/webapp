@@ -43,15 +43,6 @@ build {
     ]
   }
 
-  provisioner "shell" {
-    inline = [
-      "sudo whoami",
-      "echo current working directory is ",
-      "pwd",
-      "sudo cd ../home/csye6225/",
-    ]
-  }
-
   provisioner "file" {
     source      = "../scripts/databaseSetUp.sh"
     destination = "/tmp/databaseSetUp.sh"
