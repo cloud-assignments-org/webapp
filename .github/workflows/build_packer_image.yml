@@ -1,12 +1,17 @@
 name: Packer image build
+# on:
+#   pull_request_target:
+#     types:
+#       - closed
+
+
 on:
-  pull_request_target:
-    types:
-      - closed
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   packer_image_build:
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     # Setps to be executed
@@ -118,5 +123,5 @@ jobs:
     - name: Print Image Name
       run: echo $PKR_VAR_image_name
 
-    - name: Build Image
-      run: packer build -force -var-file=./variables.auto.pkvars.hcl .
+    # - name: Build Image
+    #   run: packer build -force -var-file=./variables.auto.pkvars.hcl .
