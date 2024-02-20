@@ -43,5 +43,9 @@ jobs:
             mkdir -p . && touch ./dist.tar.gz
           fi
 
+      - name: Decode ssh access public key
+        run: |
+          echo "${{ secrets.PACKER_PUB_KEY_BASE64 }}" | base64 --decode > tf-packer.pub
+
       - name: Validate Packer template
         run: packer validate -var-file=./variables.auto.pkvars.hcl .
