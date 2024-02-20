@@ -80,7 +80,7 @@ build {
     ]
   }
 
-    provisioner "file" {
+  provisioner "file" {
     source      = "dist.tar.gz"
     destination = "/tmp/dist.tar.gz"
   }
@@ -89,7 +89,7 @@ build {
     inline = [
       "echo Extracting code files to current directory",
       "pwd",
-      "tar -xzvf /tmp/dist.tar.gz -C .", // dist
+      "tar -xzvf /tmp/dist.tar.gz -C .",   // dist
       "sudo chown -R csye6225:csye6225 .", // dist
       "rm /tmp/dist.tar.gz",
       "mv dist/* .", // src package.json package.lock.json
