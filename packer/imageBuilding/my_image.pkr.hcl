@@ -45,11 +45,10 @@ build {
 
   provisioner "shell" {
     inline = [
-      "sudo su",
-      "whoami",
+      "sudo whoami",
       "echo current working directory is ",
       "pwd",
-      "cd ../home/csye6225/",
+      "sudo cd ../home/csye6225/",
     ]
   }
 
@@ -60,10 +59,10 @@ build {
 
   provisioner "shell" {
     inline = [
-      "pwd",
+      "sudo pwd",
       "echo Setting up Database",
-      "chmod +x /tmp/databaseSetUp.sh",
-      "sh /tmp/databaseSetUp.sh"
+      "sudo chmod +x /tmp/databaseSetUp.sh",
+      "sudo sh /tmp/databaseSetUp.sh"
     ]
   }
 
@@ -74,10 +73,10 @@ build {
 
   provisioner "shell" {
     inline = [
-      "pwd",
+      "sudo pwd",
       "echo Setting up node and other dependencies",
-      "chmod +x /tmp/environmentSetUp.sh",
-      "sh /tmp/environmentSetUp.sh"
+      "sudo chmod +x /tmp/environmentSetUp.sh",
+      "sudo sh /tmp/environmentSetUp.sh"
     ]
   }
 
