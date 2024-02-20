@@ -72,8 +72,8 @@ build {
       "echo Code files extracted",
       "sudo pwd",
       "sudo ls -alh .",
-      # "echo installing dependencies",
-      # "sudo npm ci --omit=dev" // creates node modules
+      "echo installing dependencies",
+      "sudo npm ci --omit=dev" // creates node modules
     ]
   }
 
