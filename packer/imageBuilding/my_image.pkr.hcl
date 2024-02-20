@@ -46,6 +46,9 @@ build {
   provisioner "shell" {
     inline = [
       "sudo su",
+      "whoami",
+      "echo current working directory is ",
+      "pwd",
       "cd ../home/csye6225/",
     ]
   }
