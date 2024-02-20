@@ -11,15 +11,15 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 nvm install 20.2.0
 
-echo "Installing unzip nc and lsof"
+# echo "Installing unzip nc and lsof"
 
 # installing required libraries for use later
-echo "Installing unzip"
-sudo dnf install unzip  -y 
-echo "Installing nc"
-sudo dnf install nc -y 
-echo "Installing lsof"
-sudo dnf install lsof
+# echo "Installing unzip"
+# sudo dnf install unzip  -y 
+# echo "Installing nc"
+# sudo dnf install nc -y 
+# echo "Installing lsof"
+# sudo dnf install lsof
  
 
 echo "Completed exiting"
