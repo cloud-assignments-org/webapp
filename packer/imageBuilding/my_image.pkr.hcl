@@ -71,9 +71,10 @@ build {
       "rm /tmp/dist.tar.gz",
       "echo Code files extracted",
       "sudo pwd",
+      "whoami",
       "sudo ls -alh .",
       "echo installing dependencies",
-      "sudo npm ci --omit=dev" // creates node modules
+      "npm ci --omit=dev" // creates node modules
     ]
   }
 
