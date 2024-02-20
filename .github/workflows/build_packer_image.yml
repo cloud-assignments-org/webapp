@@ -129,7 +129,7 @@ jobs:
 
     - name: Inject gcloud service account credentials 
       run: |
-        echo "${{ secrets.GP_SA_KEY }}" | base64 --decode > service-account-key.json       
+        echo "${{ secrets.GCP_SA_KEY }}" | base64 --decode > service-account-key.json       
       working-directory: ./packer/imageBuilding
 
     - name: Setup GCloud Credentials file name as github env variable
