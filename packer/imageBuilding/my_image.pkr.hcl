@@ -44,16 +44,16 @@ build {
   }
 
   provisioner "file" {
-    source      = "../scripts/environmentSetUp.sh"
-    destination = "/tmp/environmentSetUp.sh"
+    source      = "../scripts/nodeJsInstallation.sh"
+    destination = "/tmp/nodeJsInstallation.sh"
   }
 
   provisioner "shell" {
     inline = [
       "sudo pwd",
       "echo Setting up node and other dependencies",
-      "sudo chmod +x /tmp/environmentSetUp.sh",
-      "sudo sh /tmp/environmentSetUp.sh"
+      "sudo chmod +x /tmp/nodeJsInstallation.sh",
+      "sudo sh /tmp/nodeJsInstallation.sh"
     ]
   }
 
@@ -65,14 +65,15 @@ build {
   provisioner "shell" {
     inline = [
       "echo Extracting code files to current directory",
-      "pwd",
-      "tar -xzvf /tmp/dist.tar.gz -C .",   // dist
+      "sudo pwd",
+      "sudo tar -xzvf /tmp/dist.tar.gz -C .",   // dist
       "sudo chown -R csye6225:csye6225 .", // dist
       "rm /tmp/dist.tar.gz",
       "echo Code files extracted",
+      "sudo pwd",
       "sudo ls -alh .",
-      "echo installing dependencies",
-      "sudo npm ci --omit=dev" // creates node modules
+      # "echo installing dependencies",
+      # "sudo npm ci --omit=dev" // creates node modules
     ]
   }
 
