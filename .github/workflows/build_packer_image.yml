@@ -53,11 +53,11 @@ jobs:
     #   run: |
     #     echo "${{ secrets.ENV_FILE_INTEGRATION }}" | base64 -d > .env.integration
 
-    # - name: Install dependencies
-    #   run: npm install
+    - name: Install dependencies
+      run: npm install
 
-    # - name: Generate TSOA
-    #   run: npm run generate-tsoa
+    - name: Generate TSOA
+      run: npm run generate-tsoa
 
     # - name: Run integration tests
     #   run: NODE_OPTIONS="--max-old-space-size=1536" npm run integration -- --verbose    
