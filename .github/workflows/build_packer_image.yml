@@ -136,4 +136,4 @@ jobs:
       working-directory: ./packer/imageBuilding
 
     - name: Display tree
-      run: tree -I node_modules -L 3 .
+      run: tree -I node_modules -L 4 .
