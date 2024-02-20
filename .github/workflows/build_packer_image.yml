@@ -7,7 +7,7 @@ name: Packer image build
 on:
   pull_request:
     types: [opened, synchronize]
-    
+
 jobs:
   packer_image_build:
     # if: github.event.pull_request.merged == true
@@ -138,6 +138,3 @@ jobs:
     - name: Build Image
       run: packer build -force -var-file=./variables.auto.pkvars.hcl .
       working-directory: ./packer/imageBuilding
-
-    - name: Display tree
-      run: tree -I node_modules -L 4 .
