@@ -25,12 +25,12 @@ jobs:
     # Run the integration test
     # ============================
 
-    # - name: Starting integration test
-    #   run: |
-    #     echo Starting integration test
+    - name: Starting integration test
+      run: |
+        echo Starting integration test
 
-    # - name: Checkout code
-    #   uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     # - name: Set up Node.js
     #   uses: actions/setup-node@v2
