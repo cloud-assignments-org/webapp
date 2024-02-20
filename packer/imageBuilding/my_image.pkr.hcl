@@ -7,18 +7,18 @@ packer {
   }
 }
 
-source "googlecompute" "root" {
+source "googlecompute" "centos" {
   project_id              = var.project_id
   zone                    = var.zone
   source_image_family     = var.source_image_family
   source_image_project_id = var.source_image_project
-  ssh_username            = "root"
+  ssh_username            = "centos"
   image_name              = var.image_name
 }
 
 build {
   sources = [
-    "source.googlecompute.root",
+    "source.googlecompute.centos",
   ]
 
   # Run this later if you also need to provide ssh access to this machine
