@@ -69,8 +69,6 @@ build {
       "tar -xzvf /tmp/dist.tar.gz -C .",   // dist
       "sudo chown -R csye6225:csye6225 .", // dist
       "rm /tmp/dist.tar.gz",
-      "mv ./dist/* .", // src package.json package.lock.json
-      "rm -rf ./dist/",
       "echo Code files extracted",
       "ls -alh .",
       "echo installing dependencies",
