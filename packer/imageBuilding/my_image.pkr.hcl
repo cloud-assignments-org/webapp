@@ -43,20 +43,10 @@ build {
     ]
   }
 
-  provisioner "file" {
-    source      = "dist.tar.gz"
-    destination = "/tmp/dist.tar.gz"
-  }
-
   provisioner "shell" {
     inline = [
       "sudo su",
       "cd ../home/csye6225/",
-      "tar -xzvf /tmp/dist.tar.gz -C .",
-      "sudo chown -R csye6225:csye6225 .",
-      "rm /tmp/dist.tar.gz",
-      "mv dist/src/* .",
-      "rm -rf dist/"
     ]
   }
 
@@ -67,8 +57,9 @@ build {
 
   provisioner "shell" {
     inline = [
+      "pwd"
+      "echo Setting up Database",
       "chmod +x /tmp/databaseSetUp.sh",
-      "pwd",
       "sh /tmp/databaseSetUp.sh"
     ]
   }
@@ -80,9 +71,31 @@ build {
 
   provisioner "shell" {
     inline = [
+      "pwd"
+      "echo Setting up node and other dependencies"
       "chmod +x /tmp/environmentSetUp.sh",
-      "pwd",
       "sh /tmp/environmentSetUp.sh"
+    ]
+  }
+
+    provisioner "file" {
+    source      = "dist.tar.gz"
+    destination = "/tmp/dist.tar.gz"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "echo Extracting code files to current directory"
+      "pwd",
+      "tar -xzvf /tmp/dist.tar.gz -C .", // dist
+      "sudo chown -R csye6225:csye6225 .", // dist
+      "rm /tmp/dist.tar.gz",
+      "mv dist/* .", // src package.json package.lock.json
+      "rm -rf dist/",
+      "echo Code files extracted",
+      "ls -alh ."
+      "echo installing dependencies",
+      "npm ci --omit=dev" // creates node modules
     ]
   }
 
