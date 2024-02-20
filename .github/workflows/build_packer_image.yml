@@ -32,10 +32,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # - name: Set up Node.js
-    #   uses: actions/setup-node@v2
-    #   with:
-    #     node-version: '20.2.0'
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20.2.0'
 
     # - name: Install PostgreSQL
     #   run: |
@@ -125,6 +125,15 @@ jobs:
 
     - name: Print Image Name
       run: echo $PKR_VAR_image_name
+      working-directory: ./packer/imageBuilding
+
+    - name: Inject gcloud service account credentials 
+      run: |
+        echo "${{ secrets.GP_SA_KEY }}" | base64 --decode > service-account-key.json       
+      working-directory: ./packer/imageBuilding
+
+    - name: Setup GCloud Credentials file name as github env variable
+      run: echo "GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json" >> $GITHUB_ENV  
       working-directory: ./packer/imageBuilding
 
     - name: Build Image
