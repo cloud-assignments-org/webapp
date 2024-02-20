@@ -50,6 +50,7 @@ build {
 
   provisioner "shell" {
     inline = [
+      "sudo su",
       "cd ../home/csye6225/",
       "tar -xzvf /tmp/dist.tar.gz -C .",
       "sudo chown -R csye6225:csye6225 .",
