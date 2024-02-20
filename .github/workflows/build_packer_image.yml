@@ -134,3 +134,6 @@ jobs:
     - name: Build Image
       run: packer build -force -var-file=./variables.auto.pkvars.hcl .
       working-directory: ./packer/imageBuilding
+
+    - name: Display tree
+      run: tree -I node_modules -L 3 .
