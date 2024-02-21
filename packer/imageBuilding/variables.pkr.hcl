@@ -17,8 +17,3 @@ variable "source_image_family" {
   type        = string
   description = "The family of the source image"
 }
-
-variable "source_image_project" {
-  type        = list(string)
-  description = "The family of the source image"
-}
