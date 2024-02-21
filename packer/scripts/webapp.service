@@ -8,7 +8,7 @@ After=network.target
 [Service]
 WorkingDirectory=/opt/webapp
 Type=simple
-User=centos
+User=csye6225
 ExecStart=npm run serve
 Restart=no
 LimitCORE=infinity
