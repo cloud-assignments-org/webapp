@@ -44,16 +44,16 @@ build {
   }
 
   provisioner "file" {
-    source      = "../scripts/nodeJsInstallation.sh"
-    destination = "/tmp/nodeJsInstallation.sh"
+    source      = "../scripts/simpleNodeInstallation.sh"
+    destination = "/tmp/simpleNodeInstallation.sh"
   }
 
   provisioner "shell" {
     inline = [
       "sudo pwd",
       "echo Setting up node and other dependencies",
-      "sudo chmod +x /tmp/nodeJsInstallation.sh",
-      "sudo sh /tmp/nodeJsInstallation.sh"
+      "sudo chmod +x /tmp/simpleNodeInstallation.sh",
+      "sudo sh /tmp/simpleNodeInstallation.sh"
     ]
   }
 
