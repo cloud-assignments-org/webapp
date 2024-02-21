@@ -1,12 +1,12 @@
 name: Packer image build
-on:
-  pull_request_target:
-    types:
-      - closed
-
 # on:
-#   pull_request:
-#     types: [opened, synchronize]
+#   pull_request_target:
+#     types:
+#       - closed
+
+on:
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   packer_image_build:
