@@ -19,9 +19,10 @@ class EnvConfiguration {
 }
 
 export enum Environment {
-  DEVELOPMENT = "DEVELOPMENT",
-  PRODUCTION = "PRODUCTION",
-  TEST = "TEST",
+  DEVELOPMENT = "development",
+  PRODUCTION = "production",
+  TEST = "test",
+  INTEGRATION = "integration"
 }
 
 export { EnvConfiguration };
