@@ -1,0 +1,17 @@
+# place this file in this location in the VM
+# /lib/systemd/system/webapp.service
+
+[Unit]
+Description=index.js
+After=network.target
+
+[Service]
+Environment=NODE_ENV=development
+Environment=NODE_PORT=3000
+Type=simple
+User=root
+ExecStart=/usr/local/bin/node /opt/webapp/dist/src/index.js
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
