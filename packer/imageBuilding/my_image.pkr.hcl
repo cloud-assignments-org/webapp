@@ -31,6 +31,21 @@ build {
   # }
 
   provisioner "file" {
+    source      = "../scripts/webapp.service"
+    destination = "/tmp/webapp.service"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "echo Copying service file to correct location",
+      "sudo chmod +x /tmp/webapp.service",
+      "ls -al /tmp/webapp.service",
+      "echo copying service file to /etc/systemd/system/",
+      "sudo cp /tmp/webapp.service /etc/systemd/system/.",
+    ]
+  }
+
+  provisioner "file" {
     source      = "../scripts/csye6225User.sh"
     destination = "/tmp/csye6225User.sh"
   }
