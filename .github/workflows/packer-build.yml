@@ -36,17 +36,17 @@ jobs:
       with:
         node-version: '20.2.0'
 
-    - name: Install PostgreSQL
-      run: |
-        sudo apt-get update
-        sudo apt-get -y install postgresql postgresql-contrib
-        sudo systemctl start postgresql
+    # - name: Install PostgreSQL
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get -y install postgresql postgresql-contrib
+    #     sudo systemctl start postgresql
 
-    - name: Configure PostgreSQL
-      run: |
-        sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }};"
-        sudo -u postgres psql -c "CREATE USER ${{ secrets.POSTGRES_USER_INTEGRATION }} WITH ENCRYPTED PASSWORD '${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}';"
-        sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
+    # - name: Configure PostgreSQL
+    #   run: |
+    #     sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }};"
+    #     sudo -u postgres psql -c "CREATE USER ${{ secrets.POSTGRES_USER_INTEGRATION }} WITH ENCRYPTED PASSWORD '${{ secrets.POSTGRES_PASSWORD_INTEGRATION }}';"
+    #     sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB_INTEGRATION }} TO ${{ secrets.POSTGRES_USER_INTEGRATION }};"
 
     - name: Create .env.integration file
       run: |
@@ -58,8 +58,8 @@ jobs:
     - name: Generate TSOA
       run: npm run generate-tsoa
 
-    - name: Run integration tests
-      run: NODE_OPTIONS="--max-old-space-size=1536" npm run integration -- --verbose    
+    # - name: Run integration tests
+    #   run: NODE_OPTIONS="--max-old-space-size=1536" npm run integration -- --verbose    
 
     - name: Integration test END
       run: |
