@@ -62,9 +62,10 @@ build {
     destination = "/tmp/dist.tar.gz"
   }
 
+  # Extracting code and installing node modules
   provisioner "shell" {
     inline = [
-      "echo Extracting code files to current directory",
+      "echo Extracting code files to current directory and installing node modules",
       "pwd",
       "tar -xzvf /tmp/dist.tar.gz -C .", // dist
       # "sudo chown -R csye6225:csye6225 .",    // dist
@@ -76,6 +77,34 @@ build {
       "npm ci --omit=dev" // creates node modules
     ]
   }
+
+  provisioner "shell" {
+    inline = [
+      "moving code to opt folder and setting the right permissions",
+      "pwd",
+      "mkdir webapp",
+      "mv -t webapp package* node_modules dist .env*",
+      "mv webapp/ ../../opt/.",
+      "chown -R csye6225:csye6225 ../../opt/webapp", // dist
+    ]
+  }
+
+  provisioner "file" {
+    source      = "../scripts/webapp.service"
+    destination = "/tmp/webapp.service"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "Copying over the webapp service file",
+      "cp /tmp/webapp.service /lib/systemd/system/webapp.service",
+      "rm /tmp/webapp.service",
+      "systemctl daemon-reload",
+      "systemctl start webapp.service",
+      "systemctl enable webapp.service"
+    ]
+  }
+
 
   provisioner "file" {
     source      = "../scripts/databaseSetUp.sh"
