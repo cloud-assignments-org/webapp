@@ -65,14 +65,13 @@ build {
   provisioner "shell" {
     inline = [
       "echo Extracting code files to current directory",
-      "sudo pwd",
-      "sudo tar -xzvf /tmp/dist.tar.gz -C .", // dist
+      "pwd",
+      "tar -xzvf /tmp/dist.tar.gz -C .", // dist
       # "sudo chown -R csye6225:csye6225 .",    // dist
       "rm /tmp/dist.tar.gz",
       "echo Code files extracted",
-      "sudo pwd",
       "whoami",
-      "sudo ls -alh .",
+      "ls -alh .",
       "echo installing dependencies",
       "npm ci --omit=dev" // creates node modules
     ]
