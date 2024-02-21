@@ -6,11 +6,11 @@ Description=Node.js Web Application
 After=network.target
 
 [Service]
-WorkingDirectory=/opt/webapp
 Type=simple
 User=csye6225
-ExecStart=npm run serve
-Restart=no
+EnvironmentFile=/opt/webapp/.env.development
+ExecStart=/usr/bin/node /opt/webapp/dist/src/index.js
+Restart=on-failure
 LimitCORE=infinity
 
 
