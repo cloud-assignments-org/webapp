@@ -2,16 +2,17 @@
 # /lib/systemd/system/webapp.service
 
 [Unit]
-Description=index.js
+Description=Node.js Web Application
 After=network.target
 
 [Service]
-Environment=NODE_ENV=development
-Environment=PORT=3000
+WorkingDirectory=/opt/webapp
 Type=simple
-User=csye6225
-ExecStart=/usr/local/bin/node /opt/webapp/dist/src/index.js
-Restart=on-failure
+User=centos
+ExecStart=npm run serve
+Restart=no
+LimitCORE=infinity
+
 
 [Install]
 WantedBy=multi-user.target
