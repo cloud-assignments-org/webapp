@@ -78,7 +78,7 @@ jobs:
 
     # Archiving the build artifact
     - name: Archive built files
-      run: tar -czvf dist.tar.gz dist/src/* package.json package-lock.json .env.development
+      run: tar -czvf dist.tar.gz dist/src/* package* .env.development
       # This creates an archive of the dist folder named dist.tar.gz
 
     - name: Upload built files as artifact
