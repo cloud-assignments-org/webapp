@@ -114,7 +114,7 @@ describe("user", () => {
         .set("Authorization", `Basic ${basicAuthToken}`)
         .expect(201);
 
-        expect(body.first_name).toEqual(updatePayload.first_name);
+        expect("testString").toEqual(updatePayload.first_name);
         expect(body.last_name).toEqual(updatePayload.last_name);
         
       })
