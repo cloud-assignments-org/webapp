@@ -1,12 +1,12 @@
 name: Packer image build
-on:
-  pull_request_target:
-    types:
-      - closed
-
 # on:
-#   pull_request:
-#     types: [opened, synchronize]
+#   pull_request_target:
+#     types:
+#       - closed
+
+on:
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   packer_image_build:
@@ -134,11 +134,6 @@ jobs:
     - name: Setup GCloud Credentials file name as github env variable
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json" >> $GITHUB_ENV  
       working-directory: ./packer/imageBuilding    
-
-    - name: Inject ssh pub key 
-      run: |
-        echo "${{ secrets.PACKER_PUB_KEY_BASE64   }}" | base64 --decode > tf-packer.pub      
-      working-directory: ./packer/imageBuilding
 
     - name: Build Image
       run: packer build -force -var-file=./variables.auto.pkvars.hcl .
