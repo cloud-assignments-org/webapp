@@ -10,7 +10,7 @@ on:
 
 jobs:
   packer_image_build:
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     # Setps to be executed
