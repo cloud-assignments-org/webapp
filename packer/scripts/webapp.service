@@ -8,6 +8,7 @@ After=network.target
 [Service]
 Type=simple
 User=csye6225
+Environment="NODE_ENV=development"
 EnvironmentFile=/opt/webapp/.env.development
 ExecStart=/usr/bin/node /opt/webapp/dist/src/index.js
 Restart=on-failure
