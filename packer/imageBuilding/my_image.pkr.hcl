@@ -8,7 +8,7 @@ packer {
 }
 
 source "googlecompute" "centos" {
-  project_id            = var.project_id
+  project_id          = var.project_xyz
   zone                = var.zone
   source_image_family = var.source_image_family
   ssh_username        = "centos"
