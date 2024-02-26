@@ -67,10 +67,6 @@ jobs:
 
     # Building the application artifact
     # ============================
-
-    - name: Create .env.development file
-      run: |
-        echo "${{ secrets.ENV_FILE_DEVELOPMENT }}" | base64 -d > .env.development
       
     # Runs the TypeScript compiler to generate build files
     - name: Compile built files
@@ -78,7 +74,7 @@ jobs:
 
     # Archiving the build artifact
     - name: Archive built files
-      run: tar -czvf dist.tar.gz dist/src/* package* .env.development
+      run: tar -czvf dist.tar.gz dist/src/* package*
       # This creates an archive of the dist folder named dist.tar.gz
 
     - name: Upload built files as artifact

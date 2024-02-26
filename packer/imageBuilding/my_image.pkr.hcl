@@ -95,20 +95,6 @@ build {
     ]
   }
 
-  provisioner "file" {
-    source      = "../scripts/databaseSetUp.sh"
-    destination = "/tmp/databaseSetUp.sh"
-  }
-
-  provisioner "shell" {
-    inline = [
-      "sudo pwd",
-      "echo Setting up Database",
-      "sudo chmod +x /tmp/databaseSetUp.sh",
-      "sudo sh /tmp/databaseSetUp.sh"
-    ]
-  }
-
   provisioner "shell" {
     inline = [
       "echo Starting service",

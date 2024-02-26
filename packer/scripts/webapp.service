@@ -9,9 +9,10 @@ After=network.target
 Type=simple
 User=csye6225
 Environment="NODE_ENV=development"
-EnvironmentFile=/opt/webapp/.env.development
+EnvironmentFile=-/opt/webapp/.env.development
+ExecStartPre=/bin/bash -c 'while [ ! -f /opt/webapp/.env.development ]; do echo "Waiting for env file to exist..."; sleep 1; done'
 ExecStart=/usr/bin/node /opt/webapp/dist/src/index.js
-Restart=on-failure
+Restart=always
 LimitCORE=infinity
 
 
