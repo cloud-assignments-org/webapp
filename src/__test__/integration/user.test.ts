@@ -84,7 +84,7 @@ describe("user", () => {
   describe("update user route", () => {
     describe("given the user was created",  () => {
 
-      it('shuold return a 201', async () => {
+      it('shuould return a 204', async () => {
         // first create the user
         const payload = {
           username: "testNew4@northeastern.edu",
@@ -112,10 +112,7 @@ describe("user", () => {
         .put("/v1/user/self")
         .send(updatePayload)
         .set("Authorization", `Basic ${basicAuthToken}`)
-        .expect(201);
-
-        expect(body.first_name).toEqual(updatePayload.first_name);
-        expect(body.last_name).toEqual(updatePayload.last_name);
+        .expect(204);
         
       })
 

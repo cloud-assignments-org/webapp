@@ -64,20 +64,17 @@ export class UserController extends Controller {
   async updateUser(
     @Request() req: express.Request,
     @Body() updatedUserDetails: UpdateUserAccount
-  ): Promise<UserResponse> {
+  ): Promise<void> {
     /**
      * Update user information
      */
     let userName = req.user?.userName;
 
-    const updatedUser = await this.userService.updateUser(
+    await this.userService.updateUser(
       updatedUserDetails,
       userName
     );
 
-    const response = ModelMapper(UserResponse, updatedUser);
-
-    this.setStatus(201);
-    return response;
+    this.setStatus(204);
   }
 }
