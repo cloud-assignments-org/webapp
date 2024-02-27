@@ -91,7 +91,9 @@ build {
       "echo installing dependencies",
       "cd /opt/webapp/.",
       "npm ci --omit=dev", // creates node modules
-      "sudo chown -R csye6225:csye6225 /opt/webapp"
+      "sudo chown -R csye6225:csye6225 /opt/webapp", // change ownership
+      "sudo chmod -R o-rwx /opt/webapp", // remove access to other users
+      "sudo chmod -R g-rwx /opt/webapp", // remove access to groups
     ]
   }
 
