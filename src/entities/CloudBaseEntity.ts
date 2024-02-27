@@ -3,7 +3,7 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class CloudBaseEntity extends BaseEntity {
-  @PrimaryGeneratedColumn("rowid")
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @Column({ type: "timestamp without time zone",  default: () => "CURRENT_TIMESTAMP" })
