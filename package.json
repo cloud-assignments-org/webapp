@@ -11,7 +11,7 @@
     "generate-tsoa": "tsoa spec-and-routes",
     "compile": "NODE_ENV=development npx tsc",
     "build": "npm run clean-up && npm run generate-tsoa && npm run test && npm run compile",
-    "serve": "NODE_ENV=development node dist/src/index.js",
+    "serve": "NODE_ENV=production node dist/src/index.js",
     "demo": "npm run build && npm run serve"
   },
   "keywords": [],
