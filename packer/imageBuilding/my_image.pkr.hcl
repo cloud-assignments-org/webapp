@@ -99,6 +99,13 @@ build {
 
   provisioner "shell" {
     inline = [
+      "curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh",
+      "sudo bash add-google-cloud-ops-agent-repo.sh --also-install"
+    ]
+  }
+
+  provisioner "shell" {
+    inline = [
       "echo Starting service",
       "echo reloading daemon",
       "sudo systemctl daemon-reload",
