@@ -97,10 +97,19 @@ build {
     ]
   }
 
+  # Installing OPS agent and updating OPS agent config to read log files
+  provisioner "file" {
+    source      = "../scripts/updateOpsAgent.sh"
+    destination = "/tmp/updateOpsAgent.sh"
+  }
+
   provisioner "shell" {
     inline = [
       "curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh",
-      "sudo bash add-google-cloud-ops-agent-repo.sh --also-install"
+      "sudo bash add-google-cloud-ops-agent-repo.sh --also-install",
+      "sudo chmod +x /tmp/updateOpsAgent.sh",
+      "sudo sh /tmp/updateOpsAgent.sh"
+
     ]
   }
 
