@@ -15,11 +15,15 @@ logging:
     my-app-processor:
       type: parse_json
       time_key: time
-      time_format: "%Y-%m-%dT%H:%M:%S%Z"
+      time_format: "%Y-%m-%dT%H:%M:%S.%S%Z"
+    change_severity:
+      type: modify_fields
+      fields:
+        severity:
+          copy_from: jsonPayload.level
   service:
-    log_level: info
     pipelines:
       default_pipeline:
         receivers: [my-app-receiver]
-        processors: [my-app-processor]
+        processors: [my-app-processor,change_severity]
 INNER_EOF
