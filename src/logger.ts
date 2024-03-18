@@ -13,7 +13,7 @@ const logger =
           winston.format.printf((info) => {
             let logEntry = {
               time: info.timestamp,
-              level: info.level,
+              level: info.level.toUpperCase(),
               message: info.message,
             };
 
