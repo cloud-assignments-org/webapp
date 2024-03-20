@@ -14,7 +14,7 @@ const logger =
             let logEntry = {
               time: info.timestamp,
               level: info.level.toUpperCase(),
-              message: info.message,
+              ...logMessageToJson(info.message)
             };
 
             // Include additional context if available
@@ -34,14 +34,48 @@ const logger =
       })
     : winston.createLogger({
         format: combine(
-          errors({ stack: true }), // <-- use errors format
-          colorize()
+          winston.format.timestamp({
+            format: "YYYY-MM-DDTHH:mm:ssZ",
+          }),
+          winston.format.printf((info) => {
+            let logEntry = {
+              time: info.timestamp,
+              level: info.level.toUpperCase(),
+              ...logMessageToJson(info.message)
+            };
+
+            // Include additional context if available
+            //    Need to define the log message type to enforce good logging practices
+            //   if (info.context) {
+            //     logEntry.context = info.context;
+            //   }
+
+            return JSON.stringify(logEntry);
+          })
         ),
         level: "debug",
-        transports: [
-          new winston.transports.Console(),
-          new winston.transports.File({ filename: "/tmp/webapp.log" }),
-        ],
+        transports: [new winston.transports.Console()],
       });
+
+interface LogMessage {
+  whatHappened: string;
+  whereHappened: string;
+  whyHappened: string;
+}
+
+function logMessageToJson(logMessage: string): LogMessage {
+  const regex = /^(.+)\. Occurred at: (.+)\. Reason: (.+)$/;
+  const match = logMessage.match(regex);
+
+  if (match) {
+    return {
+      whatHappened: match[1],
+      whereHappened: match[2],
+      whyHappened: match[3],
+    };
+  } else {
+    throw new Error("Invalid log message format");
+  }
+}
 
 export default logger;

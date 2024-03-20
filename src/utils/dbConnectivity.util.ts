@@ -1,5 +1,6 @@
 import { AppDataSource } from "../config/database.config";
 import { DBConnection } from "../entities";
+import logMessage, { Severity } from "./loggerUtil.util";
 
 export const checkDBConnectionRepeatedly = () => {
   // We try to see if we have established connection to the database, else we try doing it again after a given interval
@@ -8,7 +9,7 @@ export const checkDBConnectionRepeatedly = () => {
   }, 1000);
 };
 
-export const connectDB = async () : Promise<boolean> => {
+export const connectDB = async (): Promise<boolean> => {
   if (!AppDataSource.isInitialized) {
     await AppDataSource.initialize()
 
@@ -22,7 +23,12 @@ export const connectDB = async () : Promise<boolean> => {
           });
 
         connection.i += 1;
-
+        logMessage(
+          "Updating DB Connection entry",
+          "dbConnectivity Util",
+          "DB Connection succesful",
+          Severity.INFO
+        );
         await connection.save();
 
         return true;
@@ -30,7 +36,10 @@ export const connectDB = async () : Promise<boolean> => {
       .catch(async (err) => {
         // console.log(err);
         // catching errors - but don't want to pollute logs with a line every 1 second
-        console.error("Error during Data Source initialization retrying in 1 second", err);
+        console.error(
+          "Error during Data Source initialization retrying in 1 second",
+          err
+        );
 
         return false;
       });
