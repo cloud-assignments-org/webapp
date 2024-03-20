@@ -30,4 +30,4 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
     logMessage("Internal server error", "Error handler middleware", error.message, Severity.ERROR);
     res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).end();
   }
-};o
+};
