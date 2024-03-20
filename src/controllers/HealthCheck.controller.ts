@@ -1,5 +1,18 @@
-import { Controller, Delete, Get, Head, Options, Post, Put, Response, Route, SuccessResponse, Tags } from "tsoa";
+import {
+  Controller,
+  Delete,
+  Get,
+  Head,
+  Options,
+  Post,
+  Put,
+  Response,
+  Route,
+  SuccessResponse,
+  Tags,
+} from "tsoa";
 import { DBConnection } from "../entities/DBConnection.js";
+import logMessage, { Severity } from "../utils/loggerUtil.util.js";
 
 @Route("/")
 @Tags("public")
@@ -18,11 +31,29 @@ export class HealthCheckController extends Controller {
     try {
       const connection = (await DBConnection.find())[0];
       if (connection) {
+        logMessage(
+          "Succesfully connected to DB",
+          "GET /healthz",
+          "DB Up and Running",
+          Severity.INFO
+        );
         this.setStatus(200);
       } else {
+        logMessage(
+          "Could not connect to DB",
+          "GET /healthz",
+          "Could not find connection entry in DBConnection table",
+          Severity.ERROR
+        );
         this.setStatus(503);
       }
     } catch (error: any) {
+      logMessage(
+        "Failed to connect to DB",
+        "GET /healthz",
+        error.code,
+        Severity.ERROR
+      );
       this.setStatus(503);
     }
     return;
@@ -33,7 +64,13 @@ export class HealthCheckController extends Controller {
     /**
      * Health endpoint
      */
-     this.setStatus(405);
+    logMessage(
+      "Invalid HTTP Method",
+      "POST /healthz",
+      `${this.getHeaders()}`,
+      Severity.WARNING
+    );
+    this.setStatus(405);
     return;
   }
 
@@ -43,6 +80,12 @@ export class HealthCheckController extends Controller {
     /**
      * Health endpoint
      */
+    logMessage(
+      "Invalid HTTP Method",
+      "POST /healthz",
+      `${this.getHeaders()}`,
+      Severity.WARNING
+    );
     this.setStatus(405);
     return;
   }
@@ -52,6 +95,12 @@ export class HealthCheckController extends Controller {
     /**
      * Health endpoint
      */
+    logMessage(
+      "Invalid HTTP Method",
+      "POST /healthz",
+      `${this.getHeaders()}`,
+      Severity.WARNING
+    );
     this.setStatus(405);
     return;
   }
@@ -61,6 +110,12 @@ export class HealthCheckController extends Controller {
     /**
      * Health endpoint
      */
+    logMessage(
+      "Invalid HTTP Method",
+      "POST /healthz",
+      `${this.getHeaders()}`,
+      Severity.WARNING
+    );
     this.setStatus(405);
     return;
   }
@@ -70,7 +125,13 @@ export class HealthCheckController extends Controller {
     /**
      * Health endpoint
      */
+    logMessage(
+      "Invalid HTTP Method",
+      "POST /healthz",
+      `${this.getHeaders()}`,
+      Severity.WARNING
+    );
     this.setStatus(405);
     return;
-  }  
+  }
 }

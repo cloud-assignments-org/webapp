@@ -2,6 +2,7 @@
 import express from "express";
 import { User } from "../entities/User.js";
 import bcrypt from "bcrypt";
+import logMessage, { Severity } from "../utils/loggerUtil.util.js";
 
 /**
  * This is the basic auth middleware. Here we try to fetch the user details from the basic auth token provided by the user,
@@ -39,6 +40,7 @@ export const basicAuthMiddleware = async (
       });
 
       if (!user) {
+        logMessage("Unauthorized user trying to access", "basicAuthMiddleWare", "User not registered", Severity.ERROR);
         return res.status(401).end();
       }
 
@@ -50,9 +52,11 @@ export const basicAuthMiddleware = async (
         }; // Attach user to request object
         next();
       } else {
+        logMessage("Unauthorized user trying to access", "basicAuthMiddleWare", "Password does not match", Severity.ERROR);
         return res.status(401).end();
       }
-    } catch (error) {
+    } catch (error:any) {
+      logMessage("Error in authenticating user", "basicAuthMiddleware", error, Severity.ERROR);
       return res.status(500).json({ message: "Internal Server Error" }).end();
     }
   } else {
