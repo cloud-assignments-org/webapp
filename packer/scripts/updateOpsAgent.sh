@@ -15,7 +15,7 @@ logging:
     my-app-processor:
       type: parse_json
       time_key: time
-      time_format: "%Y-%m-%dT%H:%M:%S.%S%Z"
+      time_format: "%Y-%m-%dT%H:%M:%S"
     change_severity:
       type: modify_fields
       fields:
