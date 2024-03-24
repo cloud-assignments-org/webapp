@@ -50,3 +50,9 @@ export class AuthError extends Error {
     super(message);
   }
 }
+
+export class ExpiredTokenError extends Error {
+  constructor(message?: string | undefined) {
+    super(message);
+  }
+}

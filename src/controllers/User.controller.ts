@@ -9,6 +9,7 @@ import {
   SuccessResponse,
   Put,
   Tags,
+  Query,
 } from "tsoa";
 import express from "express";
 import UserService from "../service/UserService.js";
@@ -59,6 +60,21 @@ export class UserController extends Controller {
     return response;
   }
 
+  @Get("user/verifyEmail")
+  @Tags("public")
+  @SuccessResponse("204")
+  async verifyEmail(@Query() username: string): Promise<void> {
+    await this.userService.verifyEmail(username);
+  }
+
+  @Put("user/setValidity")
+  @Tags("private")
+  @SuccessResponse("201")
+  async setEmailValidity(@Body() body: string): Promise<void> {
+    const { validUpto, username } = JSON.parse(body);
+    await this.userService.setEmailValidity(validUpto, username);
+  }
+
   @Put("user/self")
   @Tags("authenticated")
   async updateUser(
@@ -70,10 +86,7 @@ export class UserController extends Controller {
      */
     let userName = req.user?.userName;
 
-    await this.userService.updateUser(
-      updatedUserDetails,
-      userName
-    );
+    await this.userService.updateUser(updatedUserDetails, userName);
 
     this.setStatus(204);
   }

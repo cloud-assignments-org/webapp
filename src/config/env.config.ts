@@ -16,6 +16,8 @@ class EnvConfiguration {
 
   // LOG
   static LOG_LEVEL = process.env.LOG_LEVEL;
+
+  static USER_CREATED_TOPC = process.env.USER_CREATED_TOPC || "new-user";
 }
 
 export enum Environment {
