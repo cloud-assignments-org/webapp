@@ -16,4 +16,10 @@ export class User extends CloudBaseEntity {
     @Column("varchar", {nullable: false})
     last_name!: string
 
+    @Column("boolean", {default: false, nullable: false})
+    validated!: boolean
+
+    @Column({ type: "timestamp without time zone", nullable: true} )
+    validity: Date;
+
 }
