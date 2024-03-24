@@ -12,6 +12,7 @@ import swaggerJson from "../routes/swagger.json";
 import { errorHandler } from "../errorHandling/ErrorHandler.js";
 import { basicAuthMiddleware } from "./basicAuth.middleware.js";
 import { dbCheck } from "./dbCheckMiddleWare.js";
+import { emailValidityMiddleware } from "./emailValidityMiddleWare.js";
 
 export const configMiddleware = (app: any) => {
   app.use(express.json());
@@ -27,7 +28,7 @@ export const configMiddleware = (app: any) => {
   app.use(cors());
   app.use(cacheControl, methodNotAllowed, badRequestHandler);
   app.use(dbCheck);
-  app.use(basicAuthMiddleware);
+  app.use(basicAuthMiddleware, emailValidityMiddleware);
   RegisterRoutes(app);
 
   app.use(errorHandler);
