@@ -4,7 +4,7 @@
   "description": "repository for web applications",
   "main": "index.js",
   "scripts": {
-    "integration" : "NODE_ENV=integration npx jest --detectOpenHandles --runInBand --testMatch=\"**/integration/**\"",
+    "integration": "NODE_ENV=integration npx jest --detectOpenHandles --runInBand --testMatch=\"**/integration/**\"",
     "test": "npx jest --detectOpenHandles --runInBand --testMatch=\"**/unit/**\" ",
     "dev": "NODE_ENV=development nodemon --exec npx esrun src/index.ts",
     "clean-up": "rm -rf dist && rm -rf ./src/routes",
@@ -35,6 +35,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@google-cloud/pubsub": "^4.3.3",
     "@tsoa/runtime": "^6.0.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",

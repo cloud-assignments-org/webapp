@@ -6,12 +6,21 @@ import {
   AuthError,
   BadInputError,
   BadRequestError,
+  ExpiredTokenError,
+  NotFoundError,
 } from "../errorHandling/Errors.js";
 import { hashPasswordAndEncode } from "../utils/bcryptHashing.util.js";
 import { checkForEmptyString } from "../utils/inputValidation.util.js";
 import logMessage, { Severity } from "../utils/loggerUtil.util.js";
 
+// Imports the Google Cloud client library
+import { PubSub } from "@google-cloud/pubsub";
+import { EnvConfiguration } from "../config/env.config.js";
+
 export default class UserService {
+  // Creates a client; cache this for further use
+  private pubSubClient = new PubSub();
+
   async getUser(userName: EmailT | undefined): Promise<User> {
     if (!userName || userName == "") {
       logMessage(
@@ -113,7 +122,11 @@ export default class UserService {
     newUser.last_name = last_name;
     newUser.password = await hashPasswordAndEncode(username, password);
 
-    return await newUser.save();
+    await newUser.save();
+
+    await this.publishMessage(newUser.username);
+
+    return newUser;
   }
 
   async updateUser(
@@ -193,5 +206,95 @@ export default class UserService {
     existingUser.lastModified = new Date();
 
     return await existingUser.save();
+  }
+
+  async verifyEmail(userName: string): Promise<void> {
+    try {
+      setEmail(userName);
+    } catch (error: any) {
+      logMessage(
+        "Invalid username",
+        "UserService.verifyEmail",
+        "Invalid username format",
+        Severity.ERROR
+      );
+      throw new BadInputError("Invalid email provided " + userName);
+    }
+    // get the user
+    const user = await User.findOneBy({
+      username: userName,
+    });
+
+    if (user == null) {
+      logMessage(
+        "User not found",
+        "verifyEmail",
+        "User not found in DB",
+        Severity.ERROR
+      );
+      throw new NotFoundError("User not found");
+    }
+
+    // check for validity
+    if (user.validity <= new Date()) {
+      logMessage(
+        "Error in validating user email",
+        "verifyEmail",
+        "Emaiil validity passed current date time",
+        Severity.WARNING
+      );
+      throw new ExpiredTokenError();
+    }
+  }
+
+  async setEmailValidity(validUpto: string, username: string): Promise<void> {
+    // find the user
+    const user = await User.findOneBy({
+      username,
+    });
+
+    if (user == null) {
+      logMessage(
+        "Issue setting email validity",
+        "setEmailValidityEndPoint",
+        "User not found in DB",
+        Severity.ERROR
+      );
+      throw new NotFoundError();
+    }
+
+    // Set validity in db
+    user.validity = new Date(validUpto);
+
+    await user.save();
+  }
+
+  private async publishMessage(userName: string) {
+    // Publishes the message as a string, e.g. "Hello, world!" or JSON.stringify(someObject)
+    const userNameBuffer = Buffer.from(JSON.stringify({ username: userName }));
+
+    const userCreatedTopic = EnvConfiguration.USER_CREATED_TOPC;
+
+    try {
+      await this.pubSubClient
+        .topic(userCreatedTopic)
+        .publishMessage({ data: userNameBuffer });
+      logMessage(
+        `Sent user created message to topic ${userCreatedTopic}`,
+        "publishMessageFunction",
+        "",
+        Severity.INFO
+      );
+    } catch (error) {
+      console.error(
+        `Received error while publishing: ${(error as Error).message}`
+      );
+      logMessage(
+        `Error while publishing messsage to topic ${userCreatedTopic}`,
+        "publishMesssageFunction",
+        (error as Error).message,
+        Severity.ERROR
+      );
+    }
   }
 }

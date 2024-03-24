@@ -6,6 +6,7 @@ import {
   AuthError,
   BadInputError,
   BadRequestError,
+  ExpiredTokenError,
   NotFoundError,
 } from "./Errors.js";
 
@@ -26,6 +27,8 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   } else if (error instanceof AuthError) {
     logMessage("Auth Error", "Error handler middleware", error.message, Severity.ERROR);
     res.status(HTTPStatusCode.UNAUTHORIZED).end();
+  } else if (error instanceof ExpiredTokenError) {
+    res.status(HTTPStatusCode.FORBIDDEN).end();
   } else {
     logMessage("Internal server error", "Error handler middleware", error.message, Severity.ERROR);
     res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).end();
