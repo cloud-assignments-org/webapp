@@ -74,7 +74,7 @@ function logMessageToJson(logMessage: string): LogMessage {
       whyHappened: match[3],
     };
   } else {
-    throw new Error("Invalid log message format");
+    throw new Error(`Invalid log message format ${logMessage}`);
   }
 }
 

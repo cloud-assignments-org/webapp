@@ -247,7 +247,7 @@ export default class UserService {
     }
   }
 
-  async setEmailValidity(validUpto: string, username: string): Promise<void> {
+  async setEmailValidity(validUpto: Date, username: string): Promise<void> {
     // find the user
     const user = await User.findOneBy({
       username,
@@ -264,7 +264,7 @@ export default class UserService {
     }
 
     // Set validity in db
-    user.validity = new Date(validUpto);
+    user.validity = validUpto;
 
     await user.save();
   }
@@ -276,25 +276,25 @@ export default class UserService {
     const userCreatedTopic = EnvConfiguration.USER_CREATED_TOPC;
 
     try {
-      await this.pubSubClient
+      const messageId = await this.pubSubClient
         .topic(userCreatedTopic)
-        .publishMessage({ data: userNameBuffer });
+        .publishMessage({
+          data: userNameBuffer,
+        });
       logMessage(
-        `Sent user created message to topic ${userCreatedTopic}`,
-        "publishMessageFunction",
-        "",
+        `Sent user created messsage to topic ${userCreatedTopic}, messageId: ${messageId}`,
+        "UserService._publishMessage",
+        "No issues present",
         Severity.INFO
       );
     } catch (error) {
-      console.error(
-        `Received error while publishing: ${(error as Error).message}`
-      );
       logMessage(
         `Error while publishing messsage to topic ${userCreatedTopic}`,
         "publishMesssageFunction",
         (error as Error).message,
         Severity.ERROR
       );
+      throw new Error((error as Error).message);
     }
   }
 }

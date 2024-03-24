@@ -17,6 +17,8 @@ import ModelMapper from "./ModelMapper.js";
 import { CreateUserAccount } from "./requestModels/CreateUserAccount.js";
 import { UpdateUserAccount } from "./requestModels/UpdateUserAccount.js";
 import { UserResponse } from "./responseModels/UserResponse.js";
+import logMessage, { Severity } from "../utils/loggerUtil.util.js";
+import { SetEmailValidity } from "./requestModels/SetEmailValidity.js";
 
 @Route("/v1")
 export class UserController extends Controller {
@@ -70,8 +72,11 @@ export class UserController extends Controller {
   @Put("user/setValidity")
   @Tags("private")
   @SuccessResponse("201")
-  async setEmailValidity(@Body() body: string): Promise<void> {
-    const { validUpto, username } = JSON.parse(body);
+  async setEmailValidity(@Body() body: SetEmailValidity): Promise<void> {
+
+    const { validUpto, username } = body;
+
+    logMessage("Received messaged for updating email validity of user", "UserController.setEmailValidity", "Valid input", Severity.INFO);
     await this.userService.setEmailValidity(validUpto, username);
   }
 
