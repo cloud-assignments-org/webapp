@@ -18,6 +18,8 @@ class EnvConfiguration {
   static LOG_LEVEL = process.env.LOG_LEVEL;
 
   static USER_CREATED_TOPC = process.env.USER_CREATED_TOPC || "new-user";
+
+  static EMAIL_VALIDITY_MINUTES = parseInt(process.env.EMAIL_VALIDITY_MINUTES || "2");
 }
 
 export enum Environment {

@@ -16,6 +16,7 @@ import logMessage, { Severity } from "../utils/loggerUtil.util.js";
 // Imports the Google Cloud client library
 import { PubSub } from "@google-cloud/pubsub";
 import { EnvConfiguration } from "../config/env.config.js";
+import publish from "../utils/pubSub.util.js";
 
 export default class UserService {
   // Creates a client; cache this for further use
@@ -244,6 +245,11 @@ export default class UserService {
         Severity.WARNING
       );
       throw new ExpiredTokenError();
+    } else {
+      // if validity still exists, set valid as true
+      user.validated = true;
+      await user.save();
+      logMessage("Set user email as valid", "UserService.verifyEmail", "Request received within validity period", Severity.INFO);
     }
   }
 
@@ -263,38 +269,18 @@ export default class UserService {
       throw new NotFoundError();
     }
 
+    logMessage(`Updating user email validity to ${validUpto}`, "UserService.setEmailValidity","User found in the DB", Severity.INFO);
     // Set validity in db
     user.validity = validUpto;
 
     await user.save();
+
+    logMessage('User updated in the DB', 'UserService.setEmailValidity', `User email validity updated ${user.validity}`, Severity.INFO);
   }
 
   private async publishMessage(userName: string) {
-    // Publishes the message as a string, e.g. "Hello, world!" or JSON.stringify(someObject)
     const userNameBuffer = Buffer.from(JSON.stringify({ username: userName }));
-
     const userCreatedTopic = EnvConfiguration.USER_CREATED_TOPC;
-
-    try {
-      const messageId = await this.pubSubClient
-        .topic(userCreatedTopic)
-        .publishMessage({
-          data: userNameBuffer,
-        });
-      logMessage(
-        `Sent user created messsage to topic ${userCreatedTopic}, messageId: ${messageId}`,
-        "UserService._publishMessage",
-        "No issues present",
-        Severity.INFO
-      );
-    } catch (error) {
-      logMessage(
-        `Error while publishing messsage to topic ${userCreatedTopic}`,
-        "publishMesssageFunction",
-        (error as Error).message,
-        Severity.ERROR
-      );
-      throw new Error((error as Error).message);
-    }
+    await publish(userNameBuffer, userCreatedTopic);
   }
 }
