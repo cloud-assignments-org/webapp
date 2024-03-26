@@ -66,6 +66,7 @@ export class UserController extends Controller {
   @Tags("public")
   @SuccessResponse("204")
   async verifyEmail(@Query() username: string): Promise<void> {
+    logMessage("Received request to validate users email", "UserController.VerifyEmail", "No issues with input", Severity.INFO);
     await this.userService.verifyEmail(username);
   }
 

@@ -58,9 +58,9 @@ const logger =
       });
 
 interface LogMessage {
-  whatHappened: string;
-  whereHappened: string;
-  whyHappened: string;
+  action: string;
+  location: string;
+  reason: string;
 }
 
 function logMessageToJson(logMessage: string): LogMessage {
@@ -69,9 +69,9 @@ function logMessageToJson(logMessage: string): LogMessage {
 
   if (match) {
     return {
-      whatHappened: match[1],
-      whereHappened: match[2],
-      whyHappened: match[3],
+      action: match[1],
+      location: match[2],
+      reason: match[3],
     };
   } else {
     throw new Error(`Invalid log message format ${logMessage}`);
