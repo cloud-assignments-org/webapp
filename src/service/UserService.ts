@@ -209,7 +209,7 @@ export default class UserService {
     return await existingUser.save();
   }
 
-  async verifyEmail(userName: string): Promise<void> {
+  async verifyEmail(userName: string, token:string): Promise<void> {
     try {
       setEmail(userName);
     } catch (error: any) {
@@ -235,6 +235,13 @@ export default class UserService {
       );
       throw new NotFoundError("User not found");
     }
+
+    // check if the token is the same as in the db
+    if(!user.validityToken || (user.validityToken != token )){
+      logMessage("Issue with validting token", "UserService.verifyEmail", "Mismatch between incoming validity token and token in db", Severity.ERROR);
+      throw new ExpiredTokenError("Invalid email validation link passed");
+    }
+
     logMessage(
       "Logging time values",
       `validity time in db ${user.validity} now date ${new Date()}`,
@@ -246,7 +253,7 @@ export default class UserService {
       logMessage(
         "Error in validating user email",
         "verifyEmail",
-        "Emaiil validity passed current date time",
+        "Email validity passed current date time",
         Severity.WARNING
       );
       throw new ExpiredTokenError("Token validity expired");
