@@ -249,7 +249,7 @@ export default class UserService {
         "Emaiil validity passed current date time",
         Severity.WARNING
       );
-      throw new ExpiredTokenError();
+      throw new ExpiredTokenError("Token validity expired");
     } else {
       // if validity still exists, set valid as true
       user.validated = true;
