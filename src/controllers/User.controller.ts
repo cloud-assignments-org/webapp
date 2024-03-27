@@ -84,7 +84,7 @@ export class UserController extends Controller {
         .setHeader("Content-Type", "text/html")
         .send(
           `<div>
-        <h3>Succesfully verified email</h3>
+        <h1>Succesfully verified email</h1>
       </div>`
         )
         .end();
@@ -94,8 +94,8 @@ export class UserController extends Controller {
         .setHeader("Content-Type", "text/html")
         .send(
           `<div>
-          <h3>Email validation failed</h3>
-          <span>${(err as Error).message}</span>
+          <h1>Email validation failed</h1>
+          <h3>${(err as Error).message}</h3>
         </div>`
         )
         .end();
