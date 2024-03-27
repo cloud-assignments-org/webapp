@@ -211,10 +211,27 @@ const validateUserEmailId = async (username : string) => {
     validUpto: date,
   };
   // set the email validity of the user
-  await supertest(app).put("/v1/user/setValidity").send(validityPayload);
+  // await supertest(app).put("/v1/user/setValidity").send(validityPayload);
+
+  // get the user
+  const user = await User.findOneBy({
+    username
+  })
+
+  if(!user){
+    throw Error();
+  }
+
+  //  here we manually set the validity value, 
+  // the payload and the random generated token and we return that
+  const randomToken = crypto.randomUUID();
+  user.validity = date;
+  user.validityToken = randomToken;
+  await user.save();
 
   // Validate the user's email as well
   await supertest(app).get("/v1/user/verifyEmail").query({
     username,
+    validityToken: randomToken
   });
 };
