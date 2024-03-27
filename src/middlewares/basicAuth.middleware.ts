@@ -44,6 +44,8 @@ export const basicAuthMiddleware = async (
         return res.status(401).end();
       }
 
+      // the saved password in the database is the one that was initially created
+      // from the credentials
       const match = await bcrypt.compare(credentials, user.password);
 
       if (match) {

@@ -1,6 +1,7 @@
 import { Entity, Column } from "typeorm"
 import { CloudBaseEntity } from "./CloudBaseEntity.js"
 
+const randomUUID = crypto.randomUUID();
 @Entity()
 export class User extends CloudBaseEntity {
 
@@ -21,5 +22,8 @@ export class User extends CloudBaseEntity {
 
     @Column({ type: "timestamp without time zone", nullable: true} )
     validity: Date;
+
+    @Column("varchar", {default : `${randomUUID}` , nullable: false})
+    validityToken!: string
 
 }
