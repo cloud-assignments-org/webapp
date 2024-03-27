@@ -235,7 +235,12 @@ export default class UserService {
       );
       throw new NotFoundError("User not found");
     }
-
+    logMessage(
+      "Logging time values",
+      `validity time in db ${user.validity} now date ${new Date()}`,
+      "Debug log",
+      Severity.INFO
+    );
     // check for validity
     if (user.validity <= new Date()) {
       logMessage(
