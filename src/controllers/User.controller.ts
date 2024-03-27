@@ -4,14 +4,14 @@ import {
   Patch,
   Post,
   Route,
-  Request,
   Get,
   SuccessResponse,
   Put,
   Tags,
   Query,
+  Request,
 } from "tsoa";
-import express from "express";
+import express, { Request as ExpressRequest } from "express";
 import UserService from "../service/UserService.js";
 import ModelMapper from "./ModelMapper.js";
 import { CreateUserAccount } from "./requestModels/CreateUserAccount.js";
@@ -65,19 +65,54 @@ export class UserController extends Controller {
   @Get("user/verifyEmail")
   @Tags("public")
   @SuccessResponse("204")
-  async verifyEmail(@Query() username: string): Promise<void> {
-    logMessage("Received request to validate users email", "UserController.VerifyEmail", "No issues with input", Severity.INFO);
-    await this.userService.verifyEmail(username);
+  async verifyEmail(
+    @Query() username: string,
+    @Request() req: ExpressRequest
+  ): Promise<void> {
+    logMessage(
+      "Received request to validate users email",
+      "UserController.VerifyEmail",
+      "No issues with input",
+      Severity.INFO
+    );
+    try {
+      await this.userService.verifyEmail(username);
+
+      req?.res
+        ?.status(200)
+        .setHeader("Content-Type", "text/html")
+        .send(
+          `<div>
+        <h3>Succesfully verified email</h3>
+      </div>`
+        )
+        .end();
+    } catch (err) {
+      req?.res
+        ?.status(403)
+        .setHeader("Content-Type", "text/html")
+        .send(
+          `<div>
+          <h3>Email validation failed</h3>
+          <span>${(err as Error).message}</span>
+        </div>`
+        )
+        .end();
+    }
   }
 
   @Put("user/setValidity")
   @Tags("private")
   @SuccessResponse("201")
   async setEmailValidity(@Body() body: SetEmailValidity): Promise<void> {
-
     const { validUpto, username } = body;
 
-    logMessage("Received messaged for updating email validity of user", "UserController.setEmailValidity", "Valid input", Severity.INFO);
+    logMessage(
+      "Received messaged for updating email validity of user",
+      "UserController.setEmailValidity",
+      "Valid input",
+      Severity.INFO
+    );
     await this.userService.setEmailValidity(validUpto, username);
   }
 
