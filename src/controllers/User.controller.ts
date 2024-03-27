@@ -67,6 +67,7 @@ export class UserController extends Controller {
   @SuccessResponse("204")
   async verifyEmail(
     @Query() username: string,
+    @Query() validityToken: string,
     @Request() req: ExpressRequest
   ): Promise<void> {
     logMessage(
@@ -76,7 +77,7 @@ export class UserController extends Controller {
       Severity.INFO
     );
     try {
-      await this.userService.verifyEmail(username);
+      await this.userService.verifyEmail(username, validityToken);
 
       req?.res
         ?.status(200)
