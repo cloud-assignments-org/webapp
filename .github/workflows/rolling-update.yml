@@ -32,9 +32,9 @@ jobs:
         --instance-template-region="us-east1" \
         --machine-type="e2-medium" \
         --image="web-app-image-20240327185559" \
-        --boot-disk-device-name="persistent-disk-0"\
-        --boot-disk-size="100GB"\
-        --boot-disk-type="pd-standard"\
+        --boot-disk-device-name="persistent-disk-0" \
+        --boot-disk-size="100GB" \
+        --boot-disk-type="pd-standard" \
         --metadata=startup-script="#!/bin/bash
         touch /opt/webapp/.env.production
         : > /opt/webapp/.env.production
