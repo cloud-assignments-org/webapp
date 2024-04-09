@@ -1,13 +1,13 @@
 name: Rolling Update
-# on:
-#   workflow_run:
-#     workflows: [packer_image_build]
-#     types:
-#       - completed
-
 on:
-  pull_request:
-    types: [opened, synchronize]
+  workflow_run:
+    workflows: [packer_image_build]
+    types:
+      - completed
+
+# on:
+#   pull_request:
+#     types: [opened, synchronize]
 
 jobs:
   deploy:
@@ -28,6 +28,19 @@ jobs:
     - name: Install jq
       run:  sudo apt-get install jq    
 
+    - name: Download Image Name from artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: image-name-artifact
+          
+    - name: Set Image Name To Github Variable
+      run: |
+        cat image_name.txt
+        IMAGE_NAME=$(cat image_name.txt)
+        echo "The string value is: $IMAGE_NAME"
+        echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+
+        
     - name: Set environment variables from JSON secret TEMPLATE_VARS_TF
       env:
         TEMPLATE_VARS_TF: ${{ secrets.TEMPLATE_VARS_TF }}
@@ -38,13 +51,14 @@ jobs:
     - name: Generating env variables
       run: |
 
-        echo Generated after infra comes up ===========
-        echo "DB_HOST=10.31.0.2" >> $GITHUB_ENV
-        echo "DB_PASSWORD=NELuXPfauDfi2QT6" >> $GITHUB_ENV
+        echo Accessing DB Host and Password from google cloud secrets
+        
+        DB_HOST=$(gcloud secrets versions access latest --secret=SQL_DB_HOST)
+        echo "DB_HOST=${DB_HOST}" >> $GITHUB_ENV
+        DB_PASSWORD=$(gcloud secrets versions access latest --secret=SQL_DB_PASSWORD)
+        echo "DB_PASSWORD=${DB_PASSWORD}" >> $GITHUB_ENV
 
-        echo Generated in previous workflow_run ============
-        echo "IMAGE_NAME=web-app-image-20240327185559" >> $GITHUB_ENV
-
+        echo Generating Unique Template Name
         echo "UNIQUE_TEMPLATE_NAME=${{ env.TEMPLATE_NAME }}-$(date +%s)" >> $GITHUB_ENV
 
     - name: Create a new Instance Template
