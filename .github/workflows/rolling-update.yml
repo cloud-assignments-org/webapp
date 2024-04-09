@@ -1,7 +1,7 @@
 name: Rolling Update
 on:
   workflow_run:
-    workflows: [packer_image_build]
+    workflows: [Packer image build]
     types:
       - completed
 
