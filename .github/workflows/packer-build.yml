@@ -1,12 +1,12 @@
 name: Packer image build
-on:
-  pull_request_target:
-    types:
-      - closed
-
 # on:
-#   pull_request:
-#     types: [opened, synchronize]
+#   pull_request_target:
+#     types:
+#       - closed
+
+on:
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   packer_image_build:
@@ -132,5 +132,18 @@ jobs:
       working-directory: ./packer/imageBuilding    
 
     - name: Build Image
-      run: packer build -force -var-file=./variables.auto.pkvars.hcl .
+      run: packer build -force -var-file=./variables.auto.pkvars.hcl . 2>&1 | sudo tee output.txt
       working-directory: ./packer/imageBuilding
+
+    - name: Get Packer Image Name
+      run: |
+        IMAGE_NAME=$(tail -1 output.txt | awk -F ': ' '{print $NF}')
+        echo $IMAGE_NAME > image_name.txt
+      working-directory: ./packer/imageBuilding
+
+    - name: Upload Image Name as Artifact for next workflow_run
+      uses: actions/upload-artifact@v2
+      with:
+        name: image-name-artifact
+        path: image_name.txt  
+        working-directory: ./packer/imageBuilding 
