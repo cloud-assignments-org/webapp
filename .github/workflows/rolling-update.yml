@@ -25,19 +25,16 @@ jobs:
         version: ">= 363.0.0"
         project_id: ${{ secrets.GCP_CLOUD_USER_SA.project_id }}
 
-    - name: Generate unique template name
-      run: echo "UNIQUE_TEMPLATE_NAME=webapp-template-$(date +%s)" >> $GITHUB_ENV  
-
-    - name: Use the Unique Template Name
+    - name: Generating env variables
       run: |
-        echo "The unique template name is $UNIQUE_TEMPLATE_NAME"
-        # You can now use $UNIQUE_TEMPLATE_NAME in subsequent steps or commands        
+        echo "UNIQUE_TEMPLATE_NAME=webapp-template-$(date +%s)" >> $GITHUB_ENV 
+        echo "REGION=us-east1" >> $GITHUB_ENV                
 
     - name: Create a new Instance Template
       id: create-instance-template
       run: |
         gcloud compute instance-templates create $UNIQUE_TEMPLATE_NAME \
-        --instance-template-region="us-east1" \
+        --instance-template-region="${{ env.REGION }}" \
         --machine-type="e2-medium" \
         --image="web-app-image-20240327185559" \
         --boot-disk-device-name="persistent-disk-0" \
@@ -62,7 +59,7 @@ jobs:
         --maintenance-policy="MIGRATE" \
         --provisioning-model="STANDARD" \
         --network="https://www.googleapis.com/compute/v1/projects/cloud-dev-project-417513/global/networks/vpc-1" \
-        --subnet="https://www.googleapis.com/compute/v1/projects/cloud-dev-project-417513/regions/us-east1/subnetworks/webapp" \
+        --subnet="https://www.googleapis.com/compute/v1/projects/cloud-dev-project-417513/regions/${{ env.REGION }}/subnetworks/webapp" \
         --tags="load-balanced-backend" \
         --service-account="compute-service-account@cloud-dev-project-417513.iam.gserviceaccount.com" \
         --scopes="cloud-platform"
@@ -72,18 +69,18 @@ jobs:
       run: |
         gcloud compute instance-groups managed set-instance-template \
         l7-xlb-backend-example \
-        --template=projects/cloud-dev-project-417513/regions/us-east1/instanceTemplates/$UNIQUE_TEMPLATE_NAME \
-        --region=us-east1  
+        --template=projects/cloud-dev-project-417513/regions/${{ env.REGION }}/instanceTemplates/$UNIQUE_TEMPLATE_NAME \
+        --region=${{ env.REGION }}  
 
     - name: Trigger Rolling Update
       id: rolling-update-trigger
       run: |
         gcloud compute instance-groups managed rolling-action start-update \
         l7-xlb-backend-example \
-        --version='template=projects/cloud-dev-project-417513/regions/us-east1/instanceTemplates/${{ env.UNIQUE_TEMPLATE_NAME }}' \
-        --region=us-east1 --max-surge=3
+        --version='template=projects/cloud-dev-project-417513/regions/${{ env.REGION }}/instanceTemplates/${{ env.UNIQUE_TEMPLATE_NAME }}' \
+        --region=${{ env.REGION }} --max-surge=3
 
     - name: Wait for Rolling Update to completed
       id: wait-for-version-target-reached
       run: |
-        gcloud compute instance-groups managed wait-until l7-xlb-backend-example --version-target-reached --region=us-east1
+        gcloud compute instance-groups managed wait-until l7-xlb-backend-example --version-target-reached --region=${{ env.REGION }}
