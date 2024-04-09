@@ -25,10 +25,18 @@ jobs:
         version: ">= 363.0.0"
         project_id: ${{ secrets.GCP_CLOUD_USER_SA.project_id }}
 
-    - name: Describe Instance Template
-      id: describe-instance-template
+    - name: Generate unique template name
+      run: echo "UNIQUE_TEMPLATE_NAME=webapp-template-$(date +%s)" >> $GITHUB_ENV  
+
+    - name: Use the Unique Template Name
       run: |
-        gcloud compute instance-templates create webapp-template-new \
+        echo "The unique template name is $UNIQUE_TEMPLATE_NAME"
+        # You can now use $UNIQUE_TEMPLATE_NAME in subsequent steps or commands        
+
+    - name: Create a new Instance Template
+      id: create-instance-template
+      run: |
+        gcloud compute instance-templates create $UNIQUE_TEMPLATE_NAME \
         --instance-template-region="us-east1" \
         --machine-type="e2-medium" \
         --image="web-app-image-20240327185559" \
@@ -58,3 +66,11 @@ jobs:
         --tags="load-balanced-backend" \
         --service-account="compute-service-account@cloud-dev-project-417513.iam.gserviceaccount.com" \
         --scopes="cloud-platform"
+
+    - name: Update Managed Instance Group with new template
+      id: update-mig
+      run: |
+        gcloud compute instance-groups managed set-instance-template \
+        l7-xlb-backend-example \
+        --template=projects/cloud-dev-project-417513/regions/us-east1/instanceTemplates/$UNIQUE_TEMPLATE_NAME \
+        --region=us-east1  
