@@ -82,3 +82,8 @@ jobs:
         l7-xlb-backend-example \
         --version='template=projects/cloud-dev-project-417513/regions/us-east1/instanceTemplates/${{ env.UNIQUE_TEMPLATE_NAME }}' \
         --region=us-east1 --max-surge=3
+
+    - name: Wait for Rolling Update to completed
+      id: wait-for-version-target-reached
+      run: |
+        gcloud compute instance-groups managed wait-until l7-xlb-backend-example --version-target-reached --region=us-east1
