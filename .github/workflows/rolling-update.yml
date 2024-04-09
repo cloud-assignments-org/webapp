@@ -80,5 +80,5 @@ jobs:
       run: |
         gcloud compute instance-groups managed rolling-action start-update \
         l7-xlb-backend-example \
-        --version='template=projects/cloud-dev-project-417513/regions/us-east1/instanceTemplates/$UNIQUE_TEMPLATE_NAME' \
+        --version='template=projects/cloud-dev-project-417513/regions/us-east1/instanceTemplates/${{ env.UNIQUE_TEMPLATE_NAME }}' \
         --region=us-east1 --max-surge=1
