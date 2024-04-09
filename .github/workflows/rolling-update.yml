@@ -41,12 +41,10 @@ jobs:
         echo Generated after infra comes up ===========
         echo "DB_HOST=10.31.0.2" >> $GITHUB_ENV
         echo "DB_PASSWORD=NELuXPfauDfi2QT6" >> $GITHUB_ENV
+
         echo Generated in previous workflow_run ============
         echo "IMAGE_NAME=web-app-image-20240327185559" >> $GITHUB_ENV
-        echo Specific to this script ==============
-        echo "MAINTENANCE_POLICY=MIGRATE" >> $GITHUB_ENV
-        echo "PROVISIONING_MODEL=STANDARD" >> $GITHUB_ENV
-        echo "MAX_ROLLING_UPDATE_SURGE=3" >> $GITHUB_ENV
+
         echo "UNIQUE_TEMPLATE_NAME=${{ env.TEMPLATE_NAME }}-$(date +%s)" >> $GITHUB_ENV
 
     - name: Create a new Instance Template
