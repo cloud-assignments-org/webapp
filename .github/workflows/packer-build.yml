@@ -219,7 +219,7 @@ jobs:
         --boot-disk-device-name="${{ env.DISK_NAME }}" \
         --boot-disk-size="${{ env.DISK_SIZE_GB }}GB" \
         --boot-disk-type="${{ env.DISK_TYPE }}" \
-        --boot-disk-kms-key=projects/${{ env.PROJECT_ID }}/locations/${{ env.REGION }}/keyRings/webapp-key-ring/cryptoKeys/vm-key \
+        --boot-disk-kms-key="projects/${{ env.PROJECT_ID }}/locations/${{ env.REGION }}/keyRings/${{ env.VM_KEY_RING_NAME }}/cryptoKeys/${{ env.VM_KEY_NAME }}" \
         --metadata=startup-script="#!/bin/bash
           touch ${{ env.CONFIG_FILE }}
           : > ${{ env.CONFIG_FILE }}
