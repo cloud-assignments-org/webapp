@@ -147,6 +147,7 @@ jobs:
         path: image_name.txt  
   
   deploy:
+    needs: packer_image_build
     runs-on: ubuntu-latest
     steps:
 
