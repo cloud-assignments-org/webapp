@@ -12,7 +12,7 @@ export const emailValidityMiddleware = async (
   next: express.NextFunction
 ) => {
   if (
-    req.path === "/v1/user/self" &&
+    req.path === "/v4/user/self" &&
     (req.method == "PUT" || req.method == "GET")
   ) {
     const authHeader = req.headers.authorization;
