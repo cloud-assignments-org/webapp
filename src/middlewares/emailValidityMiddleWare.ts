@@ -12,7 +12,7 @@ export const emailValidityMiddleware = async (
   next: express.NextFunction
 ) => {
   if (
-    req.path === "/v4/user/self" &&
+    req.path === "/v6/user/self" &&
     (req.method == "PUT" || req.method == "GET")
   ) {
     const authHeader = req.headers.authorization;
@@ -44,7 +44,7 @@ export const emailValidityMiddleware = async (
       }
 
       const validatedUser = user.validated;
-      
+
       if (validatedUser) {
         next();
       } else {
@@ -63,7 +63,10 @@ export const emailValidityMiddleware = async (
         error,
         Severity.ERROR
       );
-      return res.status(500).json({ message: `Internal Server Error ${error}` }).end();
+      return res
+        .status(500)
+        .json({ message: `Internal Server Error ${error}` })
+        .end();
     }
   } else {
     next();
