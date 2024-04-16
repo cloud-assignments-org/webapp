@@ -18,7 +18,7 @@ export const basicAuthMiddleware = async (
   next: express.NextFunction
 ) => {
   if (
-    req.path === "/v4/user/self" &&
+    req.path === "/v6/user/self" &&
     (req.method == "PUT" || req.method == "GET")
   ) {
     const authHeader = req.headers.authorization;
@@ -40,7 +40,12 @@ export const basicAuthMiddleware = async (
       });
 
       if (!user) {
-        logMessage("Unauthorized user trying to access", "basicAuthMiddleWare", "User not registered", Severity.ERROR);
+        logMessage(
+          "Unauthorized user trying to access",
+          "basicAuthMiddleWare",
+          "User not registered",
+          Severity.ERROR
+        );
         return res.status(401).end();
       }
 
@@ -54,11 +59,21 @@ export const basicAuthMiddleware = async (
         }; // Attach user to request object
         next();
       } else {
-        logMessage("Unauthorized user trying to access", "basicAuthMiddleWare", "Password does not match", Severity.ERROR);
+        logMessage(
+          "Unauthorized user trying to access",
+          "basicAuthMiddleWare",
+          "Password does not match",
+          Severity.ERROR
+        );
         return res.status(401).end();
       }
-    } catch (error:any) {
-      logMessage("Error in authenticating user", "basicAuthMiddleware", error, Severity.ERROR);
+    } catch (error: any) {
+      logMessage(
+        "Error in authenticating user",
+        "basicAuthMiddleware",
+        error,
+        Severity.ERROR
+      );
       return res.status(500).json({ message: "Internal Server Error" }).end();
     }
   } else {
