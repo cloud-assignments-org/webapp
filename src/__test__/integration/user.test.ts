@@ -31,7 +31,7 @@ describe("user", () => {
         const basicAuthToken = encodeCredentialsToBase64(username, password);
 
         await supertest(app)
-          .get("/v6/user/self")
+          .get("/v8/user/self")
           .set("Authorization", `Basic ${basicAuthToken}`)
           .expect(401);
       });
@@ -48,7 +48,7 @@ describe("user", () => {
           };
 
           await supertest(app)
-            .post("/v6/user")
+            .post("/v8/user")
             .send(payload)
             .set("Content-Type", "application/json");
 
@@ -60,7 +60,7 @@ describe("user", () => {
           );
 
           await supertest(app)
-            .get("/v6/user/self")
+            .get("/v8/user/self")
             .set("Authorization", `Basic ${basicAuthToken}`)
             .expect(200);
         });
@@ -76,7 +76,7 @@ describe("user", () => {
           };
 
           await supertest(app)
-            .post("/v6/user")
+            .post("/v8/user")
             .send(payload)
             .set("Content-Type", "application/json");
 
@@ -86,7 +86,7 @@ describe("user", () => {
           );
 
           await supertest(app)
-            .get("/v6/user/self")
+            .get("/v8/user/self")
             .set("Authorization", `Basic ${basicAuthToken}`)
             .expect(403);
         });
@@ -105,7 +105,7 @@ describe("user", () => {
         };
 
         await supertest(app)
-          .post("/v6/user")
+          .post("/v8/user")
           .send(payload)
           .set("Content-Type", "application/json")
           .expect(201);
@@ -126,7 +126,7 @@ describe("user", () => {
           };
 
           await supertest(app)
-            .post("/v6/user")
+            .post("/v8/user")
             .send(payload)
             .set("Content-Type", "application/json");
 
@@ -146,7 +146,7 @@ describe("user", () => {
           );
 
           const { body } = await supertest(app)
-            .put("/v6/user/self")
+            .put("/v8/user/self")
             .send(updatePayload)
             .set("Authorization", `Basic ${basicAuthToken}`)
             .expect(204);
@@ -164,7 +164,7 @@ describe("user", () => {
           };
 
           await supertest(app)
-            .post("/v6/user")
+            .post("/v8/user")
             .send(payload)
             .set("Content-Type", "application/json");
 
@@ -181,7 +181,7 @@ describe("user", () => {
           );
 
           const { body } = await supertest(app)
-            .put("/v6/user/self")
+            .put("/v8/user/self")
             .send(updatePayload)
             .set("Authorization", `Basic ${basicAuthToken}`)
             .expect(403);
@@ -209,7 +209,7 @@ const validateUserEmailId = async (username: string) => {
     validUpto: date,
   };
   // set the email validity of the user
-  // await supertest(app).put("/v6/user/setValidity").send(validityPayload);
+  // await supertest(app).put("/v8/user/setValidity").send(validityPayload);
 
   // get the user
   const user = await User.findOneBy({
@@ -228,7 +228,7 @@ const validateUserEmailId = async (username: string) => {
   await user.save();
 
   // Validate the user's email as well
-  await supertest(app).get("/v6/user/verifyEmail").query({
+  await supertest(app).get("/v8/user/verifyEmail").query({
     username,
     validityToken: randomToken,
   });

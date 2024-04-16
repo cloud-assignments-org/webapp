@@ -3,7 +3,7 @@ import logMessage, { Severity } from "../utils/loggerUtil.util.js";
 
 // setting up database check for the user end point
 export const dbCheck = async (req: any, res: any, next: any) => {
-  if (req.path === "/v6/user/self" || req.path === "/v6/user") {
+  if (req.path === "/v8/user/self" || req.path === "/v8/user") {
     try {
       const connection = (await DBConnection.find())[0];
       if (connection) {
