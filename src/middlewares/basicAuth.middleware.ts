@@ -18,7 +18,7 @@ export const basicAuthMiddleware = async (
   next: express.NextFunction
 ) => {
   if (
-    req.path === "/v8/user/self" &&
+    req.path === "/v5/user/self" &&
     (req.method == "PUT" || req.method == "GET")
   ) {
     const authHeader = req.headers.authorization;
