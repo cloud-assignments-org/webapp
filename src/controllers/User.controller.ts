@@ -20,7 +20,7 @@ import { UserResponse } from "./responseModels/UserResponse.js";
 import logMessage, { Severity } from "../utils/loggerUtil.util.js";
 import { SetEmailValidity } from "./requestModels/SetEmailValidity.js";
 
-@Route("/v8")
+@Route("/v5")
 export class UserController extends Controller {
   private userService: UserService;
   constructor() {
