@@ -1,282 +1,44 @@
-# Webapp
+# Cloud Native Web Application for User Management
 
-Author: Dhruv Parthasarathy
-NUID: 002919280
+## Project Overview
 
-## Overview
-The API is built using Node.js, Express, and TypeScript, with route generation handled by tsoagit. We use github workflows to run tests and build the application before it get's pushed to the ORG main branch. 
+This project is a cloud-native web application that focuses on managing user accounts efficiently and securely. It leverages advanced cloud technologies and follows best practices in software development, deployment, and operations, demonstrating a deep understanding of cloud-native architecture and DevOps methodologies.
 
-## Getting Started
+## Key Features
 
-### Prerequisites
+- **User Account Management**: Provides functionalities for creating, updating, and retrieving user account details with full security measures and data validation.
+- **Automated User Verification**: Integrates with Google Cloud Pub/Sub to handle events such as sending verification emails upon account creation.
+- **Structured Logging**: Utilizes JSON format for logging, ensuring that logs are easy to analyze and are systematically managed through Google Cloud Logging.
+- **Event-Driven Architecture**: Makes use of Google Cloud Pub/Sub for decoupling services, which enhances the application's scalability and responsiveness.
 
-Before you begin, ensure you have the following installed:
+## Technologies Used
 
-- Node.js
-- npm (Node Package Manager)
+- **CentOS Stream 8**: Chosen for its stability and robustness as a server operating system.
+- **Programming Language**: NodeJS.
+- **Database**: PostgreSQL, integrated within the application through TypeORM for robust data management.
+- **Google Cloud Services**: Including but not limited to Google Cloud Pub/Sub, Google Cloud Functions, Google Cloud IAM, and Google Cloud Logging for comprehensive cloud functionality.
 
-### Clone the Repository
+## CI/CD and DevOps Practices
 
-Clone the project repository to your local machine via SSH. Use the command:
-    `git clone git@github.com:cloud-assignments-org/webapp.git`
+The project incorporates continuous integration and continuous deployment (CI/CD) pipelines that facilitate automated testing, building, and deployment processes:
 
-### Running the Application
+- **CI Workflows**: Automate the execution of unit and integration tests, security checks, and build processes upon each commit, ensuring that all changes meet quality standards before merging.
+- **CD Workflows**: Manage the automated deployment of the application to different environments, ensuring reliable and consistent deployment practices.
+- **Packer**: Used for building custom machine images that include the application and all necessary configurations, ensuring that environments are reproducible and consistent across deployments.
 
-- Install all dependencies (`npm i`)
-- Run all test cases (`npx jest`)
-- Start the dev environment (`npm run dev`)
-- Run the test cases (`sh testHealthz.sh`)
+## Installation and Running the Application
 
-## Features
+<!-- Instructions here detail how to set up your local development environment, configure necessary cloud services, and deploy the application both locally and on cloud platforms. -->
 
-- **Health Check Endpoint**: Provides a `/healthz` GET endpoint to check the application's health, ensuring database connectivity and operational status.
-- **Automatic Route Generation**: Utilizes `tsoa` for automatic generation of Express routes based on TypeScript decorators.
-- **Error Handling**: 
-  - Includes handling for `405 Method Not Allowed` errors, ensuring the API responds appropriately to unsupported HTTP methods on the `/healthz` endpoint. 
-  - Throws a `400 Bad Request` error if requests are made with payload object or have query parameters
-  - Throws a `503 Service Unavailable` Error when the database service is not reachable
+## Contributing
 
+<!-- Guidelines for how contributors can get involved, propose changes, submit patches, and report bugs. -->
 
-## Steps followed in completing this assignment
-1. [Setting up the database](./Documentation/DBSetup.md)
-2. [Troubleshooting](./Documentation/Troubleshooting.md)
-3. [Health Check API](./Documentation/HealthcheckAPI.md)
-4. [Setting up packer](./Documentation/PackerSetup.md)
+## License
 
-## API Endpoints
+Specify the license under which the project is made available. 
 
-- `GET /healthz`: Checks the health of the application and returns an HTTP 200 status code if healthy, or HTTP 503 if there are issues with the database connectivity.
-
-## Output 
-
-```shell
-===========================
-Base case shows 200 when database is up and 503 when database is
-down
-
-
-===========================
-curl -vvvv -XGET
-http://localhost:3000/healthz
-===========================
-
-Note: Unnecessary use of -X or --request, GET is already inferred.
-*   Trying 127.0.0.1:3000...
-* Connected to localhost (127.0.0.1) port 3000 (#0)
-> GET /healthz HTTP/1.1
-> Host: localhost:3000
-> User-Agent: curl/7.84.0
-> Accept: */*
->
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 200 OK
-< X-Powered-By: Express
-< Access-Control-Allow-Origin: *
-< cache-control: no-cache
-< max: 1
-< timeout: 1
-< Date: Tue, 06 Feb 2024 03:39:33 GMT
-< Connection: keep-alive
-< Keep-Alive: timeout=5
-< Content-Length: 0
-<
-* Connection #0 to host localhost left intact
-
-===========================
-Shows 405 Method not allowed for other types of
-requests
-===========================
-
-
-===========================
-curl -vvvv -XPUT
-http://localhost:3000/healthz
-===========================
-
-*   Trying 127.0.0.1:3000...
-* Connected to localhost (127.0.0.1) port 3000 (#0)
-> PUT /healthz HTTP/1.1
-> Host: localhost:3000
-> User-Agent: curl/7.84.0
-> Accept: */*
->
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 405 Method Not Allowed
-< X-Powered-By: Express
-< Access-Control-Allow-Origin: *
-< cache-control: no-cache
-< max: 1
-< timeout: 1
-< Date: Tue, 06 Feb 2024 03:39:33 GMT
-< Connection: keep-alive
-< Keep-Alive: timeout=5
-< Content-Length: 0
-<
-* Connection #0 to host localhost left intact
-
-===========================
-curl -vvvv -XPOST
-http://localhost:3000/healthz
-===========================
-
-*   Trying 127.0.0.1:3000...
-* Connected to localhost (127.0.0.1) port 3000 (#0)
-> POST /healthz HTTP/1.1
-> Host: localhost:3000
-> User-Agent: curl/7.84.0
-> Accept: */*
->
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 405 Method Not Allowed
-< X-Powered-By: Express
-< Access-Control-Allow-Origin: *
-< cache-control: no-cache
-< max: 1
-< timeout: 1
-< Date: Tue, 06 Feb 2024 03:39:33 GMT
-< Connection: keep-alive
-< Keep-Alive: timeout=5
-< Content-Length: 0
-<
-* Connection #0 to host localhost left intact
-
-===========================
-curl -vvvv -XPATCH
-http://localhost:3000/healthz
-===========================
-
-*   Trying 127.0.0.1:3000...
-* Connected to localhost (127.0.0.1) port 3000 (#0)
-> PATCH /healthz HTTP/1.1
-> Host: localhost:3000
-> User-Agent: curl/7.84.0
-> Accept: */*
->
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 405 Method Not Allowed
-< X-Powered-By: Express
-< Access-Control-Allow-Origin: *
-< cache-control: no-cache
-< max: 1
-< timeout: 1
-< Date: Tue, 06 Feb 2024 03:39:33 GMT
-< Connection: keep-alive
-< Keep-Alive: timeout=5
-< Content-Length: 0
-<
-* Connection #0 to host localhost left intact
-
-===========================
-curl -vvvv -XDELETE
-http://localhost:3000/healthz
-===========================
-
-*   Trying 127.0.0.1:3000...
-* Connected to localhost (127.0.0.1) port 3000 (#0)
-> DELETE /healthz HTTP/1.1
-> Host: localhost:3000
-> User-Agent: curl/7.84.0
-> Accept: */*
->
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 405 Method Not Allowed
-< X-Powered-By: Express
-< Access-Control-Allow-Origin: *
-< cache-control: no-cache
-< max: 1
-< timeout: 1
-< Date: Tue, 06 Feb 2024 03:39:33 GMT
-< Connection: keep-alive
-< Keep-Alive: timeout=5
-< Content-Length: 0
-<
-* Connection #0 to host localhost left intact
-
-===========================
-Shows 400 Bad request when url has any payload or query
-param
-===========================
-
-
-===========================
-curl -vvvv -XGET
-http://localhost:3000/healthz?test=123
-===========================
-
-Note: Unnecessary use of -X or --request, GET is already inferred.
-*   Trying 127.0.0.1:3000...
-* Connected to localhost (127.0.0.1) port 3000 (#0)
-> GET /healthz?test=123 HTTP/1.1
-> Host: localhost:3000
-> User-Agent: curl/7.84.0
-> Accept: */*
->
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 400 Bad Request
-< X-Powered-By: Express
-< Access-Control-Allow-Origin: *
-< cache-control: no-cache
-< max: 1
-< timeout: 1
-< Date: Tue, 06 Feb 2024 03:39:33 GMT
-< Connection: keep-alive
-< Keep-Alive: timeout=5
-< Content-Length: 0
-<
-* Connection #0 to host localhost left intact
-
-===========================
-curl -vvvv -XGET -d "sample String"
-http://localhost:3000/healthz
-===========================
-
-*   Trying 127.0.0.1:3000...
-* Connected to localhost (127.0.0.1) port 3000 (#0)
-> GET /healthz HTTP/1.1
-> Host: localhost:3000
-> User-Agent: curl/7.84.0
-> Accept: */*
-> Content-Length: 13
-> Content-Type: application/x-www-form-urlencoded
->
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 400 Bad Request
-< X-Powered-By: Express
-< Access-Control-Allow-Origin: *
-< cache-control: no-cache
-< max: 1
-< timeout: 1
-< Date: Tue, 06 Feb 2024 03:39:33 GMT
-< Connection: keep-alive
-< Keep-Alive: timeout=5
-< Content-Length: 0
-<
-* Connection #0 to host localhost left intact
-
-===========================
-curl -vvvv -XGET -d {test : 123} http://localhost:3000/healthz
-===========================
-
-*   Trying 127.0.0.1:3000...
-* Connected to localhost (127.0.0.1) port 3000 (#0)
-> GET /healthz HTTP/1.1
-> Host: localhost:3000
-> User-Agent: curl/7.84.0
-> Accept: */*
-> Content-Length: 12
-> Content-Type: application/x-www-form-urlencoded
->
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 400 Bad Request
-< X-Powered-By: Express
-< Access-Control-Allow-Origin: *
-< cache-control: no-cache
-< max: 1
-< timeout: 1
-< Date: Tue, 06 Feb 2024 03:39:33 GMT
-< Connection: keep-alive
-< Keep-Alive: timeout=5
-< Content-Length: 0
-<
-* Connection #0 to host localhost left intact
-```
+## Contact Information
+- **Name**: Dhruv Parthasarathy
+- **Email**: [parthasarathy.d@northeastern.edu](mailto:parthasarathy.d@northeastern.edu)
+- **LinkedIn**: [linkedin.com/in/parthasarathydhruv](https://www.linkedin.com/in/parthasarathydhruv/)
