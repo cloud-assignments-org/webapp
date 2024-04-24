@@ -1,5 +1,11 @@
 # Cloud Native Web Application for User Management
 
+[![Unit Test and Build](https://github.com/cloud-assignments-org/webapp/actions/workflows/unit-tests+build.yml/badge.svg)](https://github.com/cloud-assignments-org/webapp/actions/workflows/unit-tests+build.yml)
+[![Integration Test](https://github.com/cloud-assignments-org/webapp/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/cloud-assignments-org/webapp/actions/workflows/integration-tests.yml)
+[![Packer CI](https://github.com/cloud-assignments-org/webapp/actions/workflows/packer-validate.yml/badge.svg)](https://github.com/cloud-assignments-org/webapp/actions/workflows/packer-validate.yml)
+[![Packer image build](https://github.com/cloud-assignments-org/webapp/actions/workflows/packer-build.yml/badge.svg)](https://github.com/cloud-assignments-org/webapp/actions/workflows/packer-build.yml)
+[![Rolling Update](https://github.com/cloud-assignments-org/webapp/actions/workflows/rolling-update.yml/badge.svg)](https://github.com/cloud-assignments-org/webapp/actions/workflows/rolling-update.yml)
+
 ## Project Overview
 
 This project is a cloud-native web application that focuses on managing user accounts efficiently and securely. It leverages advanced cloud technologies and follows best practices in software development, deployment, and operations, demonstrating a deep understanding of cloud-native architecture and DevOps methodologies.
@@ -36,7 +42,7 @@ The project incorporates continuous integration and continuous deployment (CI/CD
 
 ## License
 
-Specify the license under which the project is made available. 
+[MIT Lisence](https://github.com/cloud-assignments-org/webapp/blob/main/LISENCE.md)
 
 ## Contact Information
 - **Name**: Dhruv Parthasarathy
