@@ -10,6 +10,11 @@
 
 This project is a cloud-native web application that focuses on managing user accounts efficiently and securely. It leverages advanced cloud technologies and follows best practices in software development, deployment, and operations, demonstrating a deep understanding of cloud-native architecture and DevOps methodologies.
 
+## Linked Projects: 
+
+- **[Automating Infrastructure as Code](https://github.com/parthasarathydNU/tf-gcp-infra)**: Terraform to orchestrate a secure and scalable cloud-native application deployment on Google Cloud Platform.
+- **[Serverless Cloud Function](https://github.com/parthasarathydNU/serverless)**
+
 ## Key Features
 
 - **User Account Management**: Provides functionalities for creating, updating, and retrieving user account details with full security measures and data validation.
